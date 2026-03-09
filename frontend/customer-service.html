@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能客服助手 | YUNI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6A3AB7',
+                        'primary-dark': '#5a2fa0',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .gradient-bg { background: #6A3AB7; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <nav class="bg-white border-b border-slate-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-16 flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
+                    <span class="text-lg font-semibold text-slate-900">智能客服助手</span>
+                </a>
+                <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回首页
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="mb-8">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+                客服回复与 FAQ 生成
+            </div>
+            <h1 class="text-4xl font-bold text-slate-900 mb-3">智能客服助手</h1>
+            <p class="text-slate-600 max-w-3xl">用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。</p>
+        </div>
+
+        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+            <section class="bg-white rounded-2xl border border-slate-200 p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-5">客服场景输入</h2>
+                <div class="space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-slate-600 mb-2">场景类型</label>
+                            <select id="scenario" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                                <option>售前咨询</option>
+                                <option>售后处理</option>
+                                <option>退款申请</option>
+                                <option>投诉安抚</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-slate-600 mb-2">渠道</label>
+                            <select id="channel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                                <option>在线客服</option>
+                                <option>邮件</option>
+                                <option>WhatsApp</option>
+                                <option>微信</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-slate-600 mb-2">客户问题</label>
+                        <textarea id="customer-issue" rows="9" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" placeholder="请输入客户咨询或投诉内容..."></textarea>
+                    </div>
+                    <button id="reply-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors">
+                        生成客服回复
+                    </button>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl border border-slate-200 p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="text-lg font-semibold text-slate-900">输出结果</h2>
+                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500">演示界面</span>
+                </div>
+                <div id="reply-result" class="rounded-2xl bg-slate-50 border border-slate-100 p-5 min-h-[420px] text-slate-700 leading-7">
+                    输入客户问题后，可生成客服回复、处理建议与 FAQ 分类预览。
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const replyBtn = document.getElementById('reply-btn');
+        const replyResult = document.getElementById('reply-result');
+
+        replyBtn.addEventListener('click', () => {
+            const scenario = document.getElementById('scenario').value;
+            const channel = document.getElementById('channel').value;
+            const issue = document.getElementById('customer-issue').value.trim();
+
+            if (!issue) {
+                replyResult.innerHTML = '<span class="text-slate-400">请先输入客户问题。</span>';
+                return;
+            }
+
+            replyResult.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <div class="text-sm text-slate-500 mb-1">场景信息</div>
+                        <div class="text-slate-900 font-medium">${scenario} / ${channel}</div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-slate-500 mb-1">建议回复</div>
+                        <div class="whitespace-pre-wrap">您好，感谢您的反馈。关于您提到的“${issue}”，我们已经收到并会尽快协助处理。为确保问题得到妥善跟进，我们建议先确认订单/账户信息，并由专员进一步联系您。</div>
+                    </div>
+                    <div>
+                        <div class="text-sm text-slate-500 mb-1">处理建议</div>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>优先记录问题背景与客户期望结果</li>
+                            <li>根据场景提供标准回复模板与升级流程</li>
+                            <li>同步归档为 FAQ，便于后续复用</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

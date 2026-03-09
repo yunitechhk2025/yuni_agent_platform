@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能投研助手 | YUNI Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9',
+                        'primary-dark': '#0284c7',
+                        'primary-light': '#38bdf8',
+                        accent: '#6366f1',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+        
+        .btn-glow {
+            box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.39);
+        }
+        
+        .btn-glow:hover {
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        .loading-bar {
+            animation: loading-progress 2s ease-in-out infinite;
+        }
+        
+        @keyframes loading-progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+        }
+        
+        /* Markdown 样式 */
+        .markdown-report {
+            line-height: 1.8;
+            color: #374151;
+        }
+        
+        .markdown-report h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .markdown-report h1:first-child {
+            margin-top: 0;
+        }
+        
+        .markdown-report h2 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 1.75rem 0 0.75rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .markdown-report h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 1.25rem 0 0.5rem 0;
+        }
+        
+        .markdown-report p {
+            margin: 0.75rem 0;
+        }
+        
+        .markdown-report ul, .markdown-report ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown-report li {
+            margin: 0.5rem 0;
+        }
+        
+        .markdown-report ul li {
+            list-style-type: disc;
+        }
+        
+        .markdown-report ul li::marker {
+            color: #0ea5e9;
+        }
+        
+        .markdown-report ol li {
+            list-style-type: decimal;
+        }
+        
+        .markdown-report strong {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .markdown-report em {
+            font-style: italic;
+            color: #64748b;
+        }
+        
+        .markdown-report code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: 'Menlo', 'Monaco', monospace;
+            color: #0ea5e9;
+        }
+        
+        .markdown-report pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .markdown-report pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .markdown-report hr {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 2rem 0;
+        }
+        
+        .markdown-report table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .markdown-report th, .markdown-report td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        .markdown-report th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .markdown-report blockquote {
+            border-left: 4px solid #0ea5e9;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #64748b;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        
+        .markdown-report a {
+            color: #0ea5e9;
+            text-decoration: underline;
+        }
+        
+        .stock-input {
+            transition: all 0.3s ease;
+        }
+        
+        .stock-input:hover {
+            transform: scale(1.02);
+        }
+        
+        .quick-stock {
+            transition: all 0.2s ease;
+        }
+        
+        .quick-stock:hover {
+            background: #0ea5e9;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="hero-gradient min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">Y</span>
+                    </div>
+                    <span class="text-lg font-bold text-dark">YuniTech</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> 返回平台
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full mb-4">
+                <i class="fas fa-chart-line text-primary mr-2"></i>
+                <span class="text-primary font-medium text-sm">AI 驱动的投资研究</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-dark mb-4">
+                智能<span class="gradient-text">投研</span>助手
+            </h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                输入公司名称或股票代码，AI 为您生成专业的投资分析报告
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="glass-card rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100 mb-8">
+            <!-- Quick Select -->
+            <div class="mb-6">
+                <p class="text-sm text-gray-500 mb-3">热门股票</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="setStock('腾讯')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">腾讯</button>
+                    <button onclick="setStock('阿里巴巴')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">阿里巴巴</button>
+                    <button onclick="setStock('英伟达')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">英伟达</button>
+                    <button onclick="setStock('苹果')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">苹果</button>
+                    <button onclick="setStock('特斯拉')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">特斯拉</button>
+                    <button onclick="setStock('比亚迪')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">比亚迪</button>
+                    <button onclick="setStock('茅台')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">茅台</button>
+                    <button onclick="setStock('微软')" class="quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">微软</button>
+                </div>
+            </div>
+
+            <!-- Input Field -->
+            <div class="relative mb-6">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input type="text" id="stock-input" 
+                       placeholder="输入公司名称或股票代码，如：腾讯、AAPL、0700.HK"
+                       class="stock-input w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-primary input-glow text-lg">
+            </div>
+
+            <!-- Analysis Options -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <label class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                    <span class="text-sm text-gray-700">基本面分析</span>
+                </label>
+                <label class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                    <span class="text-sm text-gray-700">财务数据</span>
+                </label>
+                <label class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                    <span class="text-sm text-gray-700">行业分析</span>
+                </label>
+                <label class="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <input type="checkbox" checked class="w-4 h-4 text-primary rounded">
+                    <span class="text-sm text-gray-700">投资建议</span>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button onclick="generateReport()" id="submit-btn"
+                    class="w-full py-4 gradient-bg text-white rounded-xl font-semibold btn-glow transition-all flex items-center justify-center space-x-2">
+                <i class="fas fa-file-alt"></i>
+                <span>生成投研报告</span>
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="hidden">
+            <div class="glass-card rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-chart-pie text-2xl text-primary animate-pulse"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-dark mb-2">AI 正在分析...</h3>
+                <p class="text-gray-500 mb-6">正在收集数据并生成专业投研报告</p>
+                <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div class="loading-bar bg-gradient-to-r from-primary to-accent h-2 rounded-full"></div>
+                </div>
+                <p class="text-sm text-gray-400 mt-4">预计需要 30-60 秒</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden fade-in">
+            <!-- Report Header -->
+            <div class="glass-card rounded-2xl p-6 shadow-lg border border-gray-100 mb-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center">
+                            <i class="fas fa-file-contract text-xl text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-dark" id="report-title">投研分析报告</h2>
+                            <p class="text-sm text-gray-500" id="report-meta">生成时间: --</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="copyReport()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="复制报告">
+                            <i class="fas fa-copy text-gray-500"></i>
+                        </button>
+                        <button onclick="resetForm()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="新分析">
+                            <i class="fas fa-redo text-gray-500"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Content -->
+            <div class="glass-card rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 mb-6">
+                <div id="report-content" class="markdown-report">
+                    <!-- Markdown content will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="https://yunitechhk.com/" class="flex-1 py-3 gradient-bg text-white rounded-xl font-semibold text-center hover:opacity-90 transition-opacity">
+                    <i class="fas fa-headset mr-2"></i> 获取专业投资顾问
+                </a>
+                <button onclick="resetForm()" class="flex-1 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-xl font-semibold hover:border-primary hover:text-primary transition-colors">
+                    <i class="fas fa-search mr-2"></i> 分析其他股票
+                </button>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="hidden">
+            <div class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-red-700 mb-2">分析失败</h3>
+                <p id="error-message" class="text-red-600 mb-4"></p>
+                <button onclick="resetForm()" class="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    重试
+                </button>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <div class="flex items-start space-x-3">
+                <i class="fas fa-exclamation-circle text-amber-500 mt-0.5"></i>
+                <div class="text-sm text-amber-800">
+                    <strong>免责声明：</strong>本报告由 AI 生成，仅供参考，不构成投资建议。投资有风险，入市需谨慎。请在做出投资决策前咨询专业投资顾问。
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-500 text-sm">
+        <p>Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a></p>
+    </footer>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        const input = document.getElementById('stock-input');
+        let reportContent = '';
+        
+        // 配置 marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+        
+        function setStock(stock) {
+            input.value = stock;
+            input.focus();
+            
+            // Update button styles
+            document.querySelectorAll('.quick-stock').forEach(btn => {
+                if (btn.textContent.trim() === stock) {
+                    btn.className = 'quick-stock px-4 py-2 bg-primary text-white rounded-full text-sm font-medium';
+                } else {
+                    btn.className = 'quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium';
+                }
+            });
+        }
+        
+        function showLoading() {
+            document.getElementById('loading-state').classList.remove('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 分析中...';
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('submit-btn').disabled = false;
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-file-alt mr-2"></i> 生成投研报告';
+        }
+        
+        function showResults(data) {
+            hideLoading();
+            document.getElementById('results-section').classList.remove('hidden');
+            
+            const answer = data.answer || '';
+            reportContent = answer;
+            
+            // Update title
+            const stockName = input.value.trim();
+            document.getElementById('report-title').textContent = `${stockName} 投研分析报告`;
+            document.getElementById('report-meta').textContent = `生成时间: ${new Date().toLocaleString('zh-CN')}`;
+            
+            // Render markdown
+            document.getElementById('report-content').innerHTML = marked.parse(answer);
+            
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function showError(message) {
+            hideLoading();
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('error-message').textContent = message;
+        }
+        
+        function resetForm() {
+            document.getElementById('results-section').classList.add('hidden');
+            document.getElementById('error-state').classList.add('hidden');
+            input.value = '';
+            reportContent = '';
+            
+            // Reset button styles
+            document.querySelectorAll('.quick-stock').forEach(btn => {
+                btn.className = 'quick-stock px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium';
+            });
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function copyReport() {
+            if (reportContent) {
+                navigator.clipboard.writeText(reportContent).then(() => {
+                    alert('报告已复制到剪贴板');
+                });
+            }
+        }
+        
+        async function generateReport() {
+            const stock = input.value.trim();
+            
+            if (!stock) {
+                alert('请输入公司名称或股票代码');
+                input.focus();
+                return;
+            }
+            
+            showLoading();
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/investment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: stock }),
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || '请求失败');
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'succeeded' && data.answer) {
+                    showResults(data);
+                } else {
+                    throw new Error('分析未完成，请重试');
+                }
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        // Enter key to submit
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                generateReport();
+            }
+        });
+    </script>
+</body>
+</html>

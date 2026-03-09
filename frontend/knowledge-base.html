@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业知识库自服务 | YUNI Tech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981',
+                        'primary-dark': '#059669',
+                        'primary-light': '#34d399',
+                        accent: '#0d9488',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .upload-zone {
+            transition: all 0.3s ease;
+            border: 2px dashed #cbd5e1;
+        }
+        
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .file-row:hover {
+            background: #f8fafc;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hero-pattern {
+            background-color: #f0fdf4;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .markdown-content {
+            line-height: 1.7;
+            color: #374151;
+        }
+        
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            font-weight: 600;
+            color: #1e293b;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        .markdown-content p { margin: 0.5rem 0; }
+        
+        .markdown-content code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="hero-pattern min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">Y</span>
+                    </div>
+                    <span class="text-lg font-bold text-dark">YuniTech</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="text-gray-600 hover:text-primary transition-colors text-sm">
+                        <i class="fas fa-arrow-left mr-1"></i> 返回平台
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-dark mb-4">
+                企业知识库<span class="gradient-text">自服务</span>
+            </h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                上传企业文档，构建专属知识库，基于自有知识智能问答
+            </p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-6">
+            <!-- 左侧：文件上传 + 文件管理 -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- 文件上传 -->
+                <div class="glass-card rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-lg font-bold text-dark mb-4 flex items-center">
+                        <i class="fas fa-cloud-upload-alt text-primary mr-2"></i>
+                        上传文档
+                    </h2>
+                    <div id="upload-zone" class="upload-zone rounded-xl p-10 text-center cursor-pointer">
+                        <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.txt,.md,.xlsx,.xls,.csv" class="hidden">
+                        <div id="upload-content">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                                <i class="fas fa-file-upload text-3xl text-primary"></i>
+                            </div>
+                            <p class="text-gray-600 mb-1">拖拽文件到此处，或 <span class="text-primary font-medium">点击选择</span></p>
+                            <p class="text-gray-400 text-sm">支持 PDF、Word、TXT、Markdown、Excel 等格式</p>
+                        </div>
+                        <div id="upload-progress" class="hidden">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                                <i class="fas fa-spinner fa-spin text-3xl text-primary"></i>
+                            </div>
+                            <p class="text-gray-600 mb-2">上传中...</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2 max-w-xs mx-auto">
+                                <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文件管理 -->
+                <div class="glass-card rounded-2xl p-6 shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-bold text-dark flex items-center">
+                            <i class="fas fa-folder-open text-primary mr-2"></i>
+                            知识库文件
+                        </h2>
+                        <span id="file-count" class="text-sm text-gray-500">共 0 个文件</span>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl overflow-hidden">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600">文件名</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600">大小</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600">上传时间</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-600">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="file-list">
+                                <tr id="empty-row">
+                                    <td colspan="4" class="px-4 py-12 text-center text-gray-400">
+                                        <i class="fas fa-inbox text-4xl mb-2 block opacity-50"></i>
+                                        暂无文件，请先上传文档
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：智能问答 -->
+            <div class="lg:col-span-1">
+                <div class="glass-card rounded-2xl p-6 shadow-xl h-full flex flex-col">
+                    <h2 class="text-lg font-bold text-dark mb-4 flex items-center">
+                        <i class="fas fa-comments text-primary mr-2"></i>
+                        智能问答
+                    </h2>
+                    <p class="text-gray-500 text-sm mb-4">基于已上传的知识库文档进行智能问答</p>
+                    
+                    <div id="chat-messages" class="chat-container flex-1 space-y-4 mb-4 p-2">
+                        <div class="flex justify-start">
+                            <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
+                                <p class="text-gray-700 text-sm">您好！我是企业知识库助手。上传文档后，您可以向我提问，我将基于知识库内容为您解答。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <input type="text" id="chat-input" 
+                               placeholder="输入您的问题..." 
+                               class="flex-1 px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                        <button id="send-btn" onclick="sendQuestion()"
+                                class="px-4 py-3 gradient-bg text-white rounded-xl font-medium hover:opacity-90 transition-opacity">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-500 text-sm mt-12">
+        <p>Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a></p>
+    </footer>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        const STORAGE_KEY = 'knowledge_base_files';
+        
+        // 从 localStorage 加载文件列表
+        function loadFiles() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+        
+        function saveFiles(files) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(files));
+            renderFileList();
+        }
+        
+        function formatSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        
+        function formatDate(date) {
+            return new Date(date).toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function renderFileList() {
+            const files = loadFiles();
+            const tbody = document.getElementById('file-list');
+            const emptyRow = document.getElementById('empty-row');
+            const fileCount = document.getElementById('file-count');
+            
+            fileCount.textContent = `共 ${files.length} 个文件`;
+            
+            if (files.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="empty-row">
+                        <td colspan="4" class="px-4 py-12 text-center text-gray-400">
+                            <i class="fas fa-inbox text-4xl mb-2 block opacity-50"></i>
+                            暂无文件，请先上传文档
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = files.map((f, i) => `
+                <tr class="file-row border-t border-gray-100" data-id="${f.id}">
+                    <td class="px-4 py-3">
+                        <i class="fas fa-file-alt text-primary mr-2"></i>
+                        <span class="text-dark font-medium truncate max-w-[200px] inline-block" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
+                    </td>
+                    <td class="px-4 py-3 text-gray-600">${formatSize(f.size)}</td>
+                    <td class="px-4 py-3 text-gray-600">${formatDate(f.uploadTime)}</td>
+                    <td class="px-4 py-3 text-right">
+                        <button onclick="deleteFile('${f.id}')" class="text-red-500 hover:text-red-600 p-1 rounded hover:bg-red-50" title="删除">
+                            <i class="fas fa-trash-alt text-sm"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function deleteFile(id) {
+            const files = loadFiles().filter(f => f.id !== id);
+            saveFiles(files);
+        }
+        
+        function generateId() {
+            return 'kb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+        }
+        
+        // 上传逻辑
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const uploadContent = document.getElementById('upload-content');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+        
+        uploadZone.addEventListener('click', () => fileInput.click());
+        
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+        
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+            e.target.value = '';
+        });
+        
+        function handleFiles(files) {
+            const validExt = ['.pdf', '.doc', '.docx', '.txt', '.md', '.xlsx', '.xls', '.csv'];
+            const validFiles = files.filter(f => {
+                const ext = '.' + f.name.split('.').pop().toLowerCase();
+                return validExt.includes(ext);
+            });
+            
+            if (validFiles.length === 0) {
+                alert('请上传支持的文件格式：PDF、Word、TXT、Markdown、Excel');
+                return;
+            }
+            
+            uploadContent.classList.add('hidden');
+            uploadProgress.classList.remove('hidden');
+            
+            let processed = 0;
+            const existingFiles = loadFiles();
+            
+            validFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const newFile = {
+                        id: generateId(),
+                        name: file.name,
+                        size: file.size,
+                        uploadTime: new Date().toISOString(),
+                        type: file.type
+                    };
+                    existingFiles.push(newFile);
+                    processed++;
+                    progressBar.style.width = (processed / validFiles.length * 100) + '%';
+                    
+                    if (processed === validFiles.length) {
+                        saveFiles(existingFiles);
+                        setTimeout(() => {
+                            uploadContent.classList.remove('hidden');
+                            uploadProgress.classList.add('hidden');
+                            progressBar.style.width = '0%';
+                        }, 500);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // 智能问答（预留 API 对接）
+        async function sendQuestion() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim();
+            if (!query) return;
+            
+            const messagesDiv = document.getElementById('chat-messages');
+            const sendBtn = document.getElementById('send-btn');
+            
+            messagesDiv.insertAdjacentHTML('beforeend', `
+                <div class="flex justify-end">
+                    <div class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
+                        <p>${escapeHtml(query)}</p>
+                    </div>
+                </div>
+            `);
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            messagesDiv.insertAdjacentHTML('beforeend', `
+                <div id="typing-indicator" class="flex justify-start">
+                    <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
+                        <div class="flex space-x-1">
+                            <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></span>
+                            <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></span>
+                            <span class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></span>
+                        </div>
+                    </div>
+                </div>
+            `);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            try {
+                // 预留：对接知识库 API，当前使用模拟回复
+                const files = loadFiles();
+                let answer;
+                if (files.length === 0) {
+                    answer = '请先上传知识库文档。上传文档后，我将基于文档内容为您提供智能问答服务。';
+                } else {
+                    answer = `已收到您的问题：「${query}」。\n\n当前知识库共有 ${files.length} 个文档。完整问答功能需对接后端知识库 API，届时将基于您上传的文档内容进行智能检索与回答。`;
+                }
+                
+                document.getElementById('typing-indicator')?.remove();
+                messagesDiv.insertAdjacentHTML('beforeend', `
+                    <div class="flex justify-start fade-in">
+                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
+                            <div class="markdown-content text-sm">${escapeHtml(answer).replace(/\n/g, '<br>')}</div>
+                        </div>
+                    </div>
+                `);
+            } catch (e) {
+                document.getElementById('typing-indicator')?.remove();
+                messagesDiv.insertAdjacentHTML('beforeend', `
+                    <div class="flex justify-start">
+                        <div class="bg-red-50 text-red-600 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%] text-sm">
+                            请求失败：${escapeHtml(e.message)}
+                        </div>
+                    </div>
+                `);
+            }
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+        }
+        
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendQuestion();
+        });
+        
+        // 初始化
+        renderFileList();
+    </script>
+</body>
+</html>

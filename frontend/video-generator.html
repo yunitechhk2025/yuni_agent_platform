@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 创意生成器 | YUNI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6A3AB7',
+                        'primary-dark': '#5a2fa0',
+                        'primary-light': '#8b5cbf',
+                        dark: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+        .camera-feed {
+            transform: scaleX(-1);
+        }
+
+        .mode-tab.active {
+            background: #6A3AB7;
+            color: #fff;
+        }
+
+        .model-card {
+            transition: all 0.2s ease;
+        }
+        .model-card.selected {
+            border-color: #6A3AB7;
+            background: rgba(106, 58, 183, 0.05);
+        }
+
+        .result-placeholder {
+            background: repeating-conic-gradient(#f1f5f9 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+        }
+
+        .generating .gen-spinner {
+            display: flex;
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+    <nav class="bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="h-16 flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
+                    <span class="text-lg font-semibold text-slate-900">AI 创意生成器</span>
+                </a>
+                <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> 返回首页
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">AI 创意生成器</h1>
+            <p class="text-slate-600">拍摄照片，选择模型，一键生成卡通形象或创意视频</p>
+        </div>
+
+        <div class="grid lg:grid-cols-[1fr_1fr] gap-6">
+            <!-- 左侧：拍照 + 配置 -->
+            <div class="space-y-5">
+                <!-- 摄像头区域 -->
+                <section class="bg-white rounded-2xl border border-slate-200 p-5 overflow-hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-semibold text-slate-900">
+                            <i class="fas fa-camera mr-2 text-primary"></i>拍照取像
+                        </h2>
+                        <div class="flex gap-2">
+                            <button id="switch-camera-btn" class="text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors" title="切换摄像头">
+                                <i class="fas fa-sync-alt mr-1"></i>切换
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative rounded-xl overflow-hidden bg-slate-900 aspect-[4/3]">
+                        <video id="camera-feed" class="camera-feed w-full h-full object-cover" autoplay playsinline></video>
+                        <canvas id="snapshot-canvas" class="hidden"></canvas>
+                        <img id="photo-preview" class="hidden w-full h-full object-cover absolute inset-0" alt="captured">
+                        <div id="camera-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
+                            <i class="fas fa-video-slash text-4xl mb-3"></i>
+                            <span class="text-sm">点击下方按钮开启摄像头</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-4">
+                        <button id="open-camera-btn" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors">
+                            <i class="fas fa-video mr-2"></i>开启摄像头
+                        </button>
+                        <button id="capture-btn" class="flex-1 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                            <i class="fas fa-camera mr-2"></i>拍照
+                        </button>
+                        <button id="retake-btn" class="hidden flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors">
+                            <i class="fas fa-redo mr-2"></i>重拍
+                        </button>
+                        <button id="upload-btn" class="py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors" title="上传照片">
+                            <i class="fas fa-upload"></i>
+                        </button>
+                        <input type="file" id="file-input" accept="image/*" class="hidden">
+                    </div>
+                </section>
+
+                <!-- 生成配置 -->
+                <section class="bg-white rounded-2xl border border-slate-200 p-5">
+                    <h2 class="text-base font-semibold text-slate-900 mb-4">
+                        <i class="fas fa-sliders-h mr-2 text-primary"></i>生成配置
+                    </h2>
+
+                    <!-- 生成模式 -->
+                    <div class="mb-4">
+                        <label class="block text-sm text-slate-600 mb-2">生成模式</label>
+                        <div class="flex bg-slate-100 rounded-xl p-1">
+                            <button class="mode-tab active flex-1 py-2 rounded-lg text-sm font-medium transition-colors" data-mode="avatar">卡通形象</button>
+                            <button class="mode-tab flex-1 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600" data-mode="video">创意视频</button>
+                        </div>
+                    </div>
+
+                    <!-- 模型选择 -->
+                    <div class="mb-4">
+                        <label class="block text-sm text-slate-600 mb-2">选择模型</label>
+                        <div id="model-list" class="grid grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-1">
+                            <!-- 生图模型 -->
+                            <div class="model-card selected cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-5.0-lite" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedream 5.0 Lite <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 轻量高速</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4.5" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Seedream 4.5</div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 均衡高质</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Seedream 4</div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 稳定可靠</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-pro" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Nano Banana Pro</div>
+                                <div class="text-xs text-slate-500 mt-0.5">专业版 · 精细写实</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Nano Banana</div>
+                                <div class="text-xs text-slate-500 mt-0.5">快速 · 多风格</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-2" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Nano Banana 2 <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
+                                <div class="text-xs text-slate-500 mt-0.5">新一代 · 更高质量</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="4o-image" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">4o Image</div>
+                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 多功能生图</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="flux-kontext" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Flux Kontext</div>
+                                <div class="text-xs text-slate-500 mt-0.5">上下文感知 · 精准编辑</div>
+                            </div>
+                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="flux-2" data-type="avatar">
+                                <div class="text-sm font-medium text-slate-900">Flux 2</div>
+                                <div class="text-xs text-slate-500 mt-0.5">快速 · 精细写实</div>
+                            </div>
+                            <!-- 视频模型（默认隐藏） -->
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Sora 2</div>
+                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 高质量生成</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2-pro" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Sora 2 Pro</div>
+                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 专业版</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="veo-3.1" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Veo 3.1</div>
+                                <div class="text-xs text-slate-500 mt-0.5">Google · 高保真</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="wan-2.6" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Wan 2.6</div>
+                                <div class="text-xs text-slate-500 mt-0.5">万象 · 多风格</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedance-1.0-pro" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Seedance 1.0 Pro</div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 稳定高质</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedance-1.5-pro" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Seedance 1.5 Pro</div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 增强版</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3 opacity-60" data-model="seedance-2.0" data-type="video" data-disabled="true">
+                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedance 2.0 <span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">即将上线</span></div>
+                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 新一代</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="hailuo-02" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">MiniMax Hailuo 02</div>
+                                <div class="text-xs text-slate-500 mt-0.5">高清 · 自然运动</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="hailuo-2.3" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">MiniMax Hailuo 2.3</div>
+                                <div class="text-xs text-slate-500 mt-0.5">高清 · 流畅运镜</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="kling-v2.6" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Kling V2.6</div>
+                                <div class="text-xs text-slate-500 mt-0.5">可灵 · 长视频多运镜</div>
+                            </div>
+                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="vidu-q3-pro" data-type="video">
+                                <div class="text-sm font-medium text-slate-900">Vidu Q3 Pro</div>
+                                <div class="text-xs text-slate-500 mt-0.5">生数 · 高质量生成</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 提示词 -->
+                    <div class="mb-4">
+                        <label class="block text-sm text-slate-600 mb-2">提示词 (Prompt)</label>
+                        <textarea id="prompt-input" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none text-sm" placeholder="描述你想要的风格，例如：3D 皮克斯风格卡通形象，微笑，干净背景..."></textarea>
+                    </div>
+
+                    <!-- 风格预设 -->
+                    <div class="mb-5">
+                        <label class="block text-sm text-slate-600 mb-2">风格预设</label>
+                        <div class="flex flex-wrap gap-2" id="style-presets">
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 text-primary text-xs font-medium" data-style="3D 皮克斯卡通风格">皮克斯 3D</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="日系动漫风格，精致手绘">日系动漫</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="扁平插画风格，简约现代">扁平插画</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="水彩手绘风格，柔和自然">水彩手绘</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="赛博朋克风格，霓虹光效">赛博朋克</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="黏土风格，可爱立体">黏土风格</button>
+                        </div>
+                    </div>
+
+                    <button id="generate-btn" class="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        <i class="fas fa-magic mr-2"></i>开始生成
+                    </button>
+                </section>
+            </div>
+
+            <!-- 右侧：结果展示 -->
+            <div class="space-y-5">
+                <!-- 照片预览 -->
+                <section class="bg-white rounded-2xl border border-slate-200 p-5">
+                    <h2 class="text-base font-semibold text-slate-900 mb-4">
+                        <i class="fas fa-image mr-2 text-primary"></i>原始照片
+                    </h2>
+                    <div class="rounded-xl overflow-hidden bg-slate-100 aspect-[4/3] flex items-center justify-center">
+                        <img id="source-photo" class="hidden w-full h-full object-cover" alt="source">
+                        <div id="source-placeholder" class="text-slate-400 text-center p-6">
+                            <i class="fas fa-portrait text-4xl mb-3 block"></i>
+                            <span class="text-sm">拍照或上传后在此显示</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 生成结果 -->
+                <section class="bg-white rounded-2xl border border-slate-200 p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-semibold text-slate-900">
+                            <i class="fas fa-wand-magic-sparkles mr-2 text-primary"></i>生成结果
+                        </h2>
+                        <button id="download-btn" class="hidden text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
+                            <i class="fas fa-download mr-1"></i>下载
+                        </button>
+                    </div>
+                    <div id="result-area" class="rounded-xl overflow-hidden bg-slate-50 border border-slate-100 aspect-[4/3] flex items-center justify-center relative">
+                        <div id="result-placeholder" class="text-slate-400 text-center p-6">
+                            <i class="fas fa-sparkles text-4xl mb-3 block"></i>
+                            <span class="text-sm">生成结果将在此展示</span>
+                        </div>
+                        <!-- 生成中状态 -->
+                        <div id="generating-state" class="hidden absolute inset-0 bg-white/90 flex flex-col items-center justify-center">
+                            <div class="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin mb-4"></div>
+                            <p id="gen-status-text" class="text-slate-700 font-medium mb-1">正在提交任务...</p>
+                            <p id="gen-model-label" class="text-slate-500 text-sm">模型: -</p>
+                            <div class="w-48 mt-3 bg-slate-200 rounded-full h-1.5">
+                                <div id="gen-progress-bar" class="bg-primary h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                            <p id="gen-progress-text" class="text-slate-400 text-xs mt-1.5">0%</p>
+                        </div>
+                        <img id="result-image" class="hidden w-full h-full object-cover" alt="result">
+                        <video id="result-video" class="hidden w-full h-full object-cover" controls></video>
+                    </div>
+                    <div id="result-meta" class="hidden mt-3 flex items-center justify-between text-xs text-slate-500">
+                        <span id="meta-model">模型: -</span>
+                        <span id="meta-time">耗时: -</span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = typeof CONFIG !== 'undefined' ? CONFIG.API_BASE : '';
+
+        let stream = null;
+        let capturedBlob = null;
+        let currentMode = 'avatar';
+        let selectedModel = 'seedream-5.0-lite';
+        let facingMode = 'user';
+
+        const cameraFeed = document.getElementById('camera-feed');
+        const snapshotCanvas = document.getElementById('snapshot-canvas');
+        const photoPreview = document.getElementById('photo-preview');
+        const cameraPlaceholder = document.getElementById('camera-placeholder');
+        const sourcePhoto = document.getElementById('source-photo');
+        const sourcePlaceholder = document.getElementById('source-placeholder');
+        const promptInput = document.getElementById('prompt-input');
+
+        // --- Camera ---
+        document.getElementById('open-camera-btn').addEventListener('click', openCamera);
+        document.getElementById('capture-btn').addEventListener('click', capturePhoto);
+        document.getElementById('retake-btn').addEventListener('click', retakePhoto);
+        document.getElementById('switch-camera-btn').addEventListener('click', switchCamera);
+        document.getElementById('upload-btn').addEventListener('click', () => document.getElementById('file-input').click());
+        document.getElementById('file-input').addEventListener('change', handleFileUpload);
+
+        async function openCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode, width: { ideal: 1280 }, height: { ideal: 960 } },
+                    audio: false
+                });
+                cameraFeed.srcObject = stream;
+                cameraFeed.classList.remove('hidden');
+                cameraPlaceholder.classList.add('hidden');
+                photoPreview.classList.add('hidden');
+                document.getElementById('capture-btn').disabled = false;
+                document.getElementById('open-camera-btn').innerHTML = '<i class="fas fa-video-slash mr-2"></i>关闭摄像头';
+                document.getElementById('open-camera-btn').onclick = closeCamera;
+            } catch (e) {
+                alert('无法访问摄像头，请检查权限设置。');
+            }
+        }
+
+        function closeCamera() {
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+            cameraFeed.srcObject = null;
+            cameraFeed.classList.add('hidden');
+            cameraPlaceholder.classList.remove('hidden');
+            document.getElementById('capture-btn').disabled = true;
+            document.getElementById('open-camera-btn').innerHTML = '<i class="fas fa-video mr-2"></i>开启摄像头';
+            document.getElementById('open-camera-btn').onclick = openCamera;
+        }
+
+        async function switchCamera() {
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            if (stream) {
+                closeCamera();
+                await openCamera();
+            }
+        }
+
+        function capturePhoto() {
+            snapshotCanvas.width = cameraFeed.videoWidth;
+            snapshotCanvas.height = cameraFeed.videoHeight;
+            const ctx = snapshotCanvas.getContext('2d');
+            ctx.translate(snapshotCanvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(cameraFeed, 0, 0);
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+            snapshotCanvas.toBlob(blob => {
+                capturedBlob = blob;
+                const url = URL.createObjectURL(blob);
+                photoPreview.src = url;
+                photoPreview.classList.remove('hidden');
+                cameraFeed.classList.add('hidden');
+                sourcePhoto.src = url;
+                sourcePhoto.classList.remove('hidden');
+                sourcePlaceholder.classList.add('hidden');
+                document.getElementById('retake-btn').classList.remove('hidden');
+                document.getElementById('capture-btn').classList.add('hidden');
+                document.getElementById('generate-btn').disabled = false;
+            }, 'image/jpeg', 0.92);
+        }
+
+        function retakePhoto() {
+            photoPreview.classList.add('hidden');
+            cameraFeed.classList.remove('hidden');
+            document.getElementById('retake-btn').classList.add('hidden');
+            document.getElementById('capture-btn').classList.remove('hidden');
+            capturedBlob = null;
+            sourcePhoto.classList.add('hidden');
+            sourcePlaceholder.classList.remove('hidden');
+            document.getElementById('generate-btn').disabled = true;
+        }
+
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            capturedBlob = file;
+            const url = URL.createObjectURL(file);
+            photoPreview.src = url;
+            photoPreview.classList.remove('hidden');
+            cameraFeed.classList.add('hidden');
+            cameraPlaceholder.classList.add('hidden');
+            sourcePhoto.src = url;
+            sourcePhoto.classList.remove('hidden');
+            sourcePlaceholder.classList.add('hidden');
+            document.getElementById('retake-btn').classList.remove('hidden');
+            document.getElementById('capture-btn').classList.add('hidden');
+            document.getElementById('generate-btn').disabled = false;
+            e.target.value = '';
+        }
+
+        // --- Mode Tabs ---
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentMode = tab.dataset.mode;
+                updateModelList();
+            });
+        });
+
+        function updateModelList() {
+            document.querySelectorAll('.model-card').forEach(card => {
+                card.classList.add('hidden');
+                card.classList.remove('selected');
+            });
+            const visible = document.querySelectorAll(`.model-card[data-type="${currentMode}"]`);
+            visible.forEach((card, i) => {
+                card.classList.remove('hidden');
+                if (i === 0) {
+                    card.classList.add('selected');
+                    selectedModel = card.dataset.model;
+                }
+            });
+        }
+
+        // --- Model Selection ---
+        document.getElementById('model-list').addEventListener('click', (e) => {
+            const card = e.target.closest('.model-card');
+            if (!card || card.classList.contains('hidden') || card.dataset.disabled === 'true') return;
+            document.querySelectorAll(`.model-card[data-type="${currentMode}"]`).forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedModel = card.dataset.model;
+        });
+
+        // --- Style Presets ---
+        document.getElementById('style-presets').addEventListener('click', (e) => {
+            const btn = e.target.closest('.style-preset');
+            if (!btn) return;
+            document.querySelectorAll('.style-preset').forEach(b => {
+                b.classList.remove('border-primary/30', 'bg-primary/5', 'text-primary');
+                b.classList.add('border-slate-200', 'text-slate-600');
+            });
+            btn.classList.add('border-primary/30', 'bg-primary/5', 'text-primary');
+            btn.classList.remove('border-slate-200', 'text-slate-600');
+            promptInput.value = btn.dataset.style;
+        });
+
+        // --- Generate ---
+        const MODEL_NAMES = {
+            'seedream-5.0-lite': 'Seedream 5.0 Lite', 'seedream-4.5': 'Seedream 4.5',
+            'seedream-4': 'Seedream 4', 'nano-banana-pro': 'Nano Banana Pro',
+            'nano-banana': 'Nano Banana', 'nano-banana-2': 'Nano Banana 2',
+            '4o-image': '4o Image', 'flux-kontext': 'Flux Kontext', 'flux-2': 'Flux 2',
+            'sora-2': 'Sora 2', 'sora-2-pro': 'Sora 2 Pro',
+            'veo-3.1': 'Veo 3.1', 'wan-2.6': 'Wan 2.6',
+            'seedance-1.0-pro': 'Seedance 1.0 Pro', 'seedance-1.5-pro': 'Seedance 1.5 Pro',
+            'seedance-2.0': 'Seedance 2.0', 'hailuo-02': 'MiniMax Hailuo 02',
+            'hailuo-2.3': 'MiniMax Hailuo 2.3', 'kling-v2.6': 'Kling V2.6',
+            'vidu-q3-pro': 'Vidu Q3 Pro',
+        };
+
+        let pollingTimer = null;
+
+        document.getElementById('generate-btn').addEventListener('click', generate);
+
+        async function generate() {
+            if (!capturedBlob) return;
+
+            const prompt = promptInput.value.trim() || '卡通风格';
+            const btn = document.getElementById('generate-btn');
+            const genState = document.getElementById('generating-state');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>提交中...';
+            resetResultArea();
+            genState.classList.remove('hidden');
+            setGenProgress(0, '正在提交任务...');
+            document.getElementById('gen-model-label').textContent =
+                `模型: ${MODEL_NAMES[selectedModel] || selectedModel}`;
+
+            const formData = new FormData();
+            formData.append('image', capturedBlob, 'photo.jpg');
+            formData.append('prompt', prompt);
+            formData.append('model', selectedModel);
+            formData.append('mode', currentMode);
+
+            const startTime = Date.now();
+
+            try {
+                const resp = await fetch(`${API_BASE}/api/generate`, {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({}));
+                    throw new Error(err.detail || `提交失败 (${resp.status})`);
+                }
+
+                const { task_id } = await resp.json();
+                if (!task_id) throw new Error('未获取到 task_id');
+
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>生成中...';
+                setGenProgress(5, '任务已提交，等待处理...');
+
+                await pollTask(task_id, startTime);
+
+            } catch (err) {
+                showError(err.message);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-magic mr-2"></i>开始生成';
+        }
+
+        async function pollTask(taskId, startTime) {
+            const POLL_INTERVAL = 3000;
+            const MAX_POLL_TIME = 10 * 60 * 1000;
+
+            while (true) {
+                await sleep(POLL_INTERVAL);
+
+                if (Date.now() - startTime > MAX_POLL_TIME) {
+                    throw new Error('生成超时（超过 10 分钟），请重试');
+                }
+
+                const resp = await fetch(`${API_BASE}/api/task/${taskId}`);
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({}));
+                    throw new Error(err.detail || `查询失败 (${resp.status})`);
+                }
+
+                const data = await resp.json();
+                const { status, progress } = data;
+
+                if (status === 'pending') {
+                    setGenProgress(Math.max(progress || 5, 5), '排队等待中...');
+                } else if (status === 'processing') {
+                    setGenProgress(Math.max(progress || 20, 20), '正在生成中...');
+                } else if (status === 'completed') {
+                    setGenProgress(100, '生成完成！');
+                    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+                    await sleep(500);
+                    showResult(data, elapsed);
+                    return;
+                } else if (status === 'failed') {
+                    throw new Error(data.error || '生成失败，请更换模型或重试');
+                }
+            }
+        }
+
+        function setGenProgress(pct, text) {
+            document.getElementById('gen-progress-bar').style.width = pct + '%';
+            document.getElementById('gen-progress-text').textContent = pct + '%';
+            document.getElementById('gen-status-text').textContent = text;
+        }
+
+        function resetResultArea() {
+            document.getElementById('result-placeholder').classList.add('hidden');
+            document.getElementById('result-image').classList.add('hidden');
+            document.getElementById('result-video').classList.add('hidden');
+            document.getElementById('download-btn').classList.add('hidden');
+            document.getElementById('result-meta').classList.add('hidden');
+        }
+
+        function showResult(data, elapsed) {
+            const genState = document.getElementById('generating-state');
+            genState.classList.add('hidden');
+
+            if (data.image_url) {
+                const img = document.getElementById('result-image');
+                img.src = data.image_url;
+                img.classList.remove('hidden');
+                document.getElementById('download-btn').classList.remove('hidden');
+                document.getElementById('download-btn').onclick = () => downloadFile(data.image_url, 'avatar.png');
+            } else if (data.video_url) {
+                const vid = document.getElementById('result-video');
+                vid.src = data.video_url;
+                vid.classList.remove('hidden');
+                vid.load();
+                document.getElementById('download-btn').classList.remove('hidden');
+                document.getElementById('download-btn').onclick = () => downloadFile(data.video_url, 'video.mp4');
+            } else {
+                document.getElementById('result-placeholder').classList.remove('hidden');
+                document.getElementById('result-placeholder').innerHTML = `
+                    <i class="fas fa-check-circle text-4xl mb-3 block text-primary"></i>
+                    <span class="text-sm text-slate-600">生成完成，但未返回媒体 URL</span>
+                `;
+            }
+
+            document.getElementById('result-meta').classList.remove('hidden');
+            document.getElementById('meta-model').textContent =
+                `模型: ${MODEL_NAMES[selectedModel] || selectedModel}`;
+            document.getElementById('meta-time').textContent = `耗时: ${elapsed}s`;
+        }
+
+        function showError(msg) {
+            document.getElementById('generating-state').classList.add('hidden');
+            document.getElementById('result-placeholder').classList.remove('hidden');
+            document.getElementById('result-placeholder').innerHTML = `
+                <i class="fas fa-exclamation-triangle text-4xl mb-3 block text-amber-500"></i>
+                <span class="text-sm text-slate-600">${msg}</span>
+                <p class="text-xs text-slate-400 mt-2">请确认后端 API 已启动并配置了 GENERATE_API_KEY</p>
+            `;
+        }
+
+        function downloadFile(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+
+        function sleep(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        }
+    </script>
+</body>
+</html>

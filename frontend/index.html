@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUNI AI Agent 平台 - 智能助手聚合中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6A3AB7',
+                        'primary-dark': '#5a2fa0',
+                        'primary-light': '#8b5cbf',
+                        dark: '#1e293b',
+                        'dark-light': '#334155',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: #6A3AB7;
+        }
+        
+        .gradient-text {
+            color: #6A3AB7;
+        }
+        
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(106, 58, 183, 0.15);
+        }
+        
+        /* 第一个板块：4 轮前的配色 */
+        .hero-section .hero-badge {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+        .hero-section .hero-gradient-text {
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-section .hero-gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+        }
+        
+        .chat-container {
+            height: 60vh;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+        
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        
+        .message-user {
+            background: #6A3AB7;
+        }
+        
+        .message-ai {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .typing-indicator span {
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        
+        /* Markdown 样式 */
+        .markdown-content {
+            line-height: 1.7;
+            color: #374151;
+        }
+        
+        .markdown-content h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .markdown-content h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 1.25rem 0 0.75rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .markdown-content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #475569;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        .markdown-content p {
+            margin: 0.75rem 0;
+        }
+        
+        .markdown-content ul, .markdown-content ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .markdown-content li {
+            margin: 0.375rem 0;
+        }
+        
+        .markdown-content ul li {
+            list-style-type: disc;
+        }
+        
+        .markdown-content ol li {
+            list-style-type: decimal;
+        }
+        
+        .markdown-content strong {
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .markdown-content em {
+            font-style: italic;
+            color: #64748b;
+        }
+        
+        .markdown-content code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+        
+        .markdown-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .markdown-content hr {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 1.5rem 0;
+        }
+        
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.875rem;
+        }
+        
+        .markdown-content th, .markdown-content td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }
+        
+        .markdown-content th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid #6A3AB7;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .markdown-content a {
+            color: #6A3AB7;
+            text-decoration: underline;
+        }
+        
+        .markdown-content a:hover {
+            color: #5a2fa0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
+                    <div>
+                        <span class="text-xl font-bold text-dark">YUNI</span>
+                        <span class="text-xl font-light text-slate-500 ml-1">AI Agent</span>
+                    </div>
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="https://yunitechhk.com/" class="text-slate-600 hover:text-primary transition-colors">
+                        <i class="fas fa-home mr-1"></i> 官网首页
+                    </a>
+                    <a href="#agents" class="text-slate-600 hover:text-slate-900 transition-colors">
+                        <i class="fas fa-robot mr-1"></i> 智能助手
+                    </a>
+                    <a href="#about" class="text-slate-600 hover:text-slate-900 transition-colors">
+                        <i class="fas fa-info-circle mr-1"></i> 关于平台
+                    </a>
+                </div>
+                <a href="https://yunitechhk.com/" class="hidden md:inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-primary/20 text-primary rounded-xl shadow-sm hover:bg-primary/5 hover:border-primary/30 transition-colors font-medium">
+                    <i class="fas fa-arrow-left text-sm"></i> 返回官网
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section relative overflow-hidden bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center">
+                <div class="inline-flex items-center px-4 py-2 hero-badge rounded-full mb-6">
+                    <span class="text-sm font-medium">智能解决方案聚合平台</span>
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-dark mb-6">
+                    YUNI <span class="hero-gradient-text">AI Agent</span> 平台
+                </h1>
+                <p class="text-xl text-slate-600 max-w-3xl mx-auto mb-10">
+                    聚合多款专业智能助手，为您的业务提供一站式解决方案。
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="#agents" class="px-8 py-4 hero-gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity">
+                        开始体验
+                    </a>
+                    <a href="https://yunitechhk.com/" class="px-8 py-4 bg-white text-slate-700 rounded-lg font-medium border border-slate-200 hover:border-indigo-300 hover:text-indigo-600 transition-colors">
+                        了解更多服务
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agents Section -->
+    <section id="agents" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">智能助手</h2>
+                <p class="text-slate-600 text-lg">选择适合您需求的智能助手</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="agent-cards">
+                <!-- Agent 1: 痛点分析助手 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">痛点分析助手</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            输入业务痛点，提供结构化解决方案，包括技术栈推荐和成本估算。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">需求分析</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">方案规划</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">成本估算</span>
+                        </div>
+                        <a href="https://yunisolution-1onw6s4uo-ivahs-projects-457ef2aa.vercel.app/" target="_blank" rel="noopener noreferrer"
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            生成解决方案
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent 2: 政务问答助手 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">政务问答助手</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            基于 RAG 检索增强生成技术，政务知识库管理，智能政务问答。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">政务问答</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">RAG</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">知识库</span>
+                        </div>
+                        <a href="https://aifreelance.ai/govkb" target="_blank" rel="noopener noreferrer"
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            进入政务问答
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent 3: 智能投研助手 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">智能投研助手</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            专业投资研究，分析财报、研究市场趋势，提供数据驱动的投资建议。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">财报分析</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">市场研究</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">投资建议</span>
+                        </div>
+                        <a href="investment.html" target="_blank" rel="noopener noreferrer"
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            生成投研报告
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent 4: AI 创意生成器 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">AI 创意生成器</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            拍照生成卡通形象或创意视频，支持多模型选择与风格定制。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">拍照生图</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">AI 视频</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">多模型</span>
+                        </div>
+                        <a href="video-generator.html" target="_blank" rel="noopener noreferrer"
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            进入创意生成器
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent 5: 企业知识库自服务 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">企业知识库自服务</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            支持企业文档上传、知识库管理，基于自有知识智能问答。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">知识库管理</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">文件上传</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">智能问答</span>
+                        </div>
+                        <a href="knowledge-base.html" 
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            进入知识库
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agent 6: 智能客服助手 -->
+                <div class="card-hover bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">智能客服助手</h3>
+                        <p class="text-slate-600 text-sm mb-4">
+                            客服话术生成、FAQ 知识库构建、投诉处理建议，提升客户服务效率。
+                        </p>
+                        <div class="flex flex-wrap gap-1.5 mb-4">
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">话术生成</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">FAQ 构建</span>
+                            <span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs">投诉处理</span>
+                        </div>
+                        <a href="customer-service.html"
+                           class="w-full py-2.5 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark transition-colors flex items-center justify-center text-sm">
+                            进入客服助手
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">平台优势</h2>
+                <p class="text-slate-600 text-lg">为什么选择 YUNI AI Agent 平台</p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bolt text-xl text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">快速响应</h3>
+                    <p class="text-slate-600 text-sm">毫秒级响应，实时获取分析结果</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-halved text-xl text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">安全可靠</h3>
+                    <p class="text-slate-600 text-sm">企业级安全保障，数据隐私保护</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cube text-xl text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">结构化输出</h3>
+                    <p class="text-slate-600 text-sm">标准化 JSON 输出，易于集成</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-xl border border-slate-200 text-center">
+                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-plug text-xl text-primary"></i>
+                    </div>
+                    <h3 class="font-semibold text-slate-900 mb-2">API 支持</h3>
+                    <p class="text-slate-600 text-sm">完整的 RESTful API，灵活调用</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+                        关于 <span class="gradient-text">YUNI AI</span>
+                    </h2>
+                    <p class="text-slate-600 text-lg mb-6">
+                        YUNI TECH LIMITED 是一家专注于人工智能技术的创新科技公司。
+                        我们致力于为企业提供最前沿的AI解决方案，帮助企业实现数字化转型。
+                    </p>
+                    <p class="text-slate-600 mb-8">
+                        YUNI AI Agent 平台是我们的核心产品之一，聚合了多款专业的智能助手，
+                        覆盖业务分析、投资研究等多个领域，为企业提供一站式的智能解决方案。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="https://yunitechhk.com/" class="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                            访问官网
+                        </a>
+                        <a href="mailto:info@yunitechhk.com" class="inline-flex items-center px-6 py-3 border border-slate-200 text-slate-700 rounded-lg hover:border-primary/50 hover:text-primary transition-colors">
+                            联系我们
+                        </a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div class="text-2xl font-bold text-slate-900 mb-2">6</div>
+                        <div class="text-slate-600 text-sm">智能助手</div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div class="text-2xl font-bold text-slate-900 mb-2">24/7</div>
+                        <div class="text-slate-600 text-sm">全天候服务</div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div class="text-2xl font-bold text-slate-900 mb-2">99.9%</div>
+                        <div class="text-slate-600 text-sm">服务可用性</div>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div class="text-2xl font-bold text-slate-900 mb-2">&lt;3s</div>
+                        <div class="text-slate-600 text-sm">平均响应</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">Y</span>
+                        </div>
+                        <span class="text-xl font-bold">YUNI TECH LIMITED</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        专业的AI科技解决方案提供商，为企业提供全方位AI解决方案。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-600 rounded-lg flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">快速链接</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="https://yunitechhk.com/" class="hover:text-white transition-colors">官网首页</a></li>
+                        <li><a href="#agents" class="hover:text-white transition-colors">智能助手</a></li>
+                        <li><a href="#about" class="hover:text-white transition-colors">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">联系方式</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><i class="fas fa-envelope mr-2"></i> info@yunitechhk.com</li>
+                        <li><i class="fas fa-phone mr-2"></i> +852 34800306</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i> 香港上環干諾道西20號</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-dark-light mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2026 YUNI TECH LIMITED. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <!-- Chat Header -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-100">
+                <div class="flex items-center space-x-3">
+                    <div id="chat-icon" class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                        <i class="fas fa-robot text-white"></i>
+                    </div>
+                    <div>
+                        <h3 id="chat-title" class="font-semibold text-slate-900">AI 助手</h3>
+                    </div>
+                </div>
+                <button onclick="closeChat()" class="w-10 h-10 hover:bg-gray-100 rounded-lg flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-gray-500"></i>
+                </button>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="chat-container flex-1 p-4 space-y-4">
+                <div class="flex justify-start">
+                    <div class="message-ai rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
+                        <p class="text-gray-700">您好！我是 AI 助手，请输入您的问题，我将为您提供专业的分析和建议。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="p-4 border-t border-slate-100">
+                <div class="flex space-x-3">
+                    <input type="text" id="chat-input" 
+                           placeholder="输入您的问题..." 
+                           class="flex-1 px-4 py-3 bg-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
+                           onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()" id="send-btn"
+                            class="px-6 py-3 gradient-bg text-white rounded-xl font-medium hover:opacity-90 transition-opacity">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        let currentAgent = null;
+        let isLoading = false;
+        
+        // 配置 marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+        });
+        
+        async function checkAgentStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/agents`);
+                const agents = await response.json();
+                
+                if (!agents.investment.configured) {
+                    document.getElementById('investment-status').innerHTML = 
+                        '<i class="fas fa-circle text-xs mr-1"></i> 配置中';
+                    document.getElementById('investment-status').className = 
+                        'px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium';
+                }
+            } catch (e) {
+                console.log('无法连接到后端服务');
+            }
+        }
+        
+        function openChat(agentId, agentName) {
+            currentAgent = agentId;
+            document.getElementById('chat-title').textContent = agentName;
+            document.getElementById('chat-modal').classList.remove('hidden');
+            document.getElementById('chat-modal').classList.add('flex');
+            
+            const iconDiv = document.getElementById('chat-icon');
+            if (agentId === 'painpoint') {
+                iconDiv.className = 'w-10 h-10 gradient-bg rounded-lg flex items-center justify-center';
+                iconDiv.innerHTML = '<i class="fas fa-lightbulb text-white"></i>';
+            } else if (agentId === 'investment') {
+                iconDiv.className = 'w-10 h-10 gradient-bg rounded-lg flex items-center justify-center';
+                iconDiv.innerHTML = '<i class="fas fa-chart-line text-white"></i>';
+            }
+            
+            document.getElementById('chat-messages').innerHTML = `
+                <div class="flex justify-start">
+                    <div class="message-ai rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
+                        <p class="text-gray-700">您好！我是${agentName}，请输入您的问题，我将为您提供专业的分析和建议。</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('chat-input').focus();
+        }
+        
+        function closeChat() {
+            document.getElementById('chat-modal').classList.add('hidden');
+            document.getElementById('chat-modal').classList.remove('flex');
+            currentAgent = null;
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !isLoading) {
+                sendMessage();
+            }
+        }
+        
+        function addUserMessage(content) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageHtml = `
+                <div class="flex justify-end">
+                    <div class="message-user rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
+                        <p class="text-white">${escapeHtml(content)}</p>
+                    </div>
+                </div>
+            `;
+            messagesDiv.insertAdjacentHTML('beforeend', messageHtml);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function addAIMessage(content, isMarkdown = false) {
+            const messagesDiv = document.getElementById('chat-messages');
+            let displayContent;
+            
+            if (isMarkdown) {
+                displayContent = marked.parse(content);
+            } else {
+                displayContent = `<p>${escapeHtml(content)}</p>`;
+            }
+            
+            const messageHtml = `
+                <div class="flex justify-start">
+                    <div class="message-ai rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
+                        <div class="markdown-content">${displayContent}</div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.insertAdjacentHTML('beforeend', messageHtml);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function addTypingIndicator() {
+            const messagesDiv = document.getElementById('chat-messages');
+            const indicatorHtml = `
+                <div id="typing-indicator" class="flex justify-start">
+                    <div class="message-ai rounded-2xl rounded-tl-sm px-4 py-3">
+                        <div class="typing-indicator flex space-x-1">
+                            <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                            <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.insertAdjacentHTML('beforeend', indicatorHtml);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function setLoading(loading) {
+            isLoading = loading;
+            const btn = document.getElementById('send-btn');
+            const input = document.getElementById('chat-input');
+            
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                input.disabled = true;
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                input.disabled = false;
+                input.focus();
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const query = input.value.trim();
+            
+            if (!query || !currentAgent || isLoading) return;
+            
+            addUserMessage(query);
+            input.value = '';
+            addTypingIndicator();
+            setLoading(true);
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/${currentAgent}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query }),
+                });
+                
+                removeTypingIndicator();
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    addAIMessage(`错误: ${error.detail || '请求失败'}`, false);
+                    setLoading(false);
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'succeeded') {
+                    // 优先使用 answer 字段（Markdown 格式）
+                    if (data.answer) {
+                        addAIMessage(data.answer, true);
+                    } else if (data.outputs) {
+                        // 如果是 Workflow，检查 outputs 中是否有文本内容
+                        const output = data.outputs.output || data.outputs;
+                        if (typeof output === 'string') {
+                            addAIMessage(output, true);
+                        } else if (typeof output === 'object') {
+                            // 结构化输出，格式化显示
+                            addAIMessage('```json\n' + JSON.stringify(output, null, 2) + '\n```', true);
+                        }
+                    } else {
+                        addAIMessage('分析完成，但没有返回内容。', false);
+                    }
+                } else {
+                    addAIMessage(`状态: ${data.status}\n请稍后重试`, false);
+                }
+                
+            } catch (error) {
+                removeTypingIndicator();
+                addAIMessage(`网络错误: ${error.message}\n请检查后端服务是否运行`, false);
+            }
+            
+            setLoading(false);
+        }
+        
+        // 页面加载时检查 Agent 状态
+        document.addEventListener('DOMContentLoaded', checkAgentStatus);
+        
+        // ESC 键关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeChat();
+        });
+    </script>
+</body>
+</html>
