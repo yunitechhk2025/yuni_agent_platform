@@ -373,7 +373,7 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 
 MODEL_NAME_MAP = {
     "seedream-5.0-lite": "doubao-seedream-5-0-lite",
-    "seedream-4.5":      "doubao-seedream-4-5",
+    "seedream-4.5":      "doubao-seedance-4-5",
     "seedream-4":        "doubao-seedance-4-0",
     "nano-banana-pro":   "gemini-3-pro-image-preview",
     "nano-banana":       "gemini-2.5-flash-image-preview",
