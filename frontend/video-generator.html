@@ -298,6 +298,19 @@
                         <span id="meta-model">模型: -</span>
                         <span id="meta-time">耗时: -</span>
                     </div>
+
+                    <!-- 二维码区域 -->
+                    <div id="qr-section" class="hidden mt-4 pt-4 border-t border-slate-100">
+                        <div class="flex items-center gap-4">
+                            <div class="shrink-0">
+                                <img id="qr-code" class="w-28 h-28 rounded-lg border border-slate-200" alt="QR Code">
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-slate-900 font-medium mb-1"><i class="fas fa-qrcode mr-1.5 text-primary"></i>扫码获取作品</p>
+                                <p class="text-slate-500 text-xs leading-relaxed">用手机扫描二维码，即可查看并保存生成的作品。链接 24 小时内有效。</p>
+                            </div>
+                        </div>
+                    </div>
                 </section>
             </div>
         </div>
@@ -583,6 +596,7 @@
             document.getElementById('result-video').classList.add('hidden');
             document.getElementById('download-btn').classList.add('hidden');
             document.getElementById('result-meta').classList.add('hidden');
+            document.getElementById('qr-section').classList.add('hidden');
         }
 
         function showResult(data, elapsed) {
@@ -614,6 +628,11 @@
             document.getElementById('meta-model').textContent =
                 `模型: ${MODEL_NAMES[selectedModel] || selectedModel}`;
             document.getElementById('meta-time').textContent = `耗时: ${elapsed}s`;
+
+            const mediaUrl = data.image_url || data.video_url;
+            if (mediaUrl) {
+                showQrCode(mediaUrl);
+            }
         }
 
         function showError(msg) {
@@ -624,6 +643,12 @@
                 <span class="text-sm text-slate-600">${msg}</span>
                 <p class="text-xs text-slate-400 mt-2">请确认后端 API 已启动并配置了 GENERATE_API_KEY</p>
             `;
+        }
+
+        function showQrCode(url) {
+            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=8&data=${encodeURIComponent(url)}`;
+            document.getElementById('qr-code').src = qrApi;
+            document.getElementById('qr-section').classList.remove('hidden');
         }
 
         function downloadFile(url, filename) {
