@@ -622,6 +622,18 @@ async def serve_logo():
     return FileResponse(logo_path)
 
 
+@app.get("/favicon.ico")
+async def serve_favicon():
+    return FileResponse(FRONTEND_DIR / "favicon.ico", media_type="image/x-icon")
+
+@app.get("/favicon-32.png")
+async def serve_favicon_png():
+    return FileResponse(FRONTEND_DIR / "favicon-32.png", media_type="image/png")
+
+@app.get("/apple-touch-icon.png")
+async def serve_apple_touch_icon():
+    return FileResponse(FRONTEND_DIR / "apple-touch-icon.png", media_type="image/png")
+
 @app.get("/i18n.js")
 async def serve_i18n():
     return FileResponse(FRONTEND_DIR / "i18n.js")
