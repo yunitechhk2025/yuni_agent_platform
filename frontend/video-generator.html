@@ -55,6 +55,182 @@
         }
         .animate-pulse-slow { animation: pulse-slow 2s ease-in-out infinite; }
     </style>
+    <script>
+    window.PAGE_TRANSLATIONS = {
+        'zh-CN': {
+            _title: 'AI 创意生成器 | YUNI',
+            nav_title: 'AI 创意生成器',
+            back_home: '返回首页',
+            page_title: 'AI 创意生成器',
+            page_subtitle: '拍摄照片，选择模型，一键生成卡通形象或创意视频',
+            tag_models: '聚合 10+ 顶级视觉模型',
+            tag_price: '统一接入，价格低至官方 50%',
+            tag_compare: '多模型效果对比',
+            camera_title: '拍照取像',
+            switch_cam: '切换',
+            camera_hint: '点击下方按钮开启摄像头',
+            open_camera: '开启摄像头',
+            capture: '拍照',
+            retake: '重拍',
+            config_title: '生成配置',
+            gen_mode: '生成模式',
+            mode_avatar: '卡通形象',
+            mode_video: '创意视频',
+            select_model: '选择模型',
+            vendor_doubao: '豆包 Doubao',
+            vendor_kuaishou: '快手',
+            vendor_alibaba: '阿里巴巴',
+            desc_seedream5lite: '轻量高速',
+            desc_seedream45: '均衡高质',
+            desc_seedream4: '稳定可靠',
+            desc_nanbanana_pro: '专业版 · 精细写实',
+            desc_nanbanana: '快速 · 多风格',
+            desc_nanbanana2: '新一代 · 更高质量',
+            desc_4oimage: '多功能生图',
+            desc_flux_kontext: '上下文感知 · 精准编辑',
+            desc_seedance15pro: '增强版 · 高质量',
+            coming_soon: '即将上架',
+            desc_seedance20: '新一代旗舰',
+            desc_klingv26: '可灵 · 长视频多运镜',
+            desc_klingv3omni: '可灵 · 全能旗舰',
+            desc_sora2: '高质量生成',
+            desc_sora2pro: '专业版',
+            desc_veo31: '高保真',
+            desc_wan26: '万象 · 多风格',
+            scene_preset: '场景预设',
+            preset_ipo: '公司上市',
+            preset_space: '飞上太空',
+            preset_rich: '突然发大财',
+            generate: '开始生成',
+            source_title: '原始照片',
+            source_hint: '拍照或上传后在此显示',
+            result_title: '生成结果',
+            download: '下载',
+            result_hint: '生成结果将在此展示',
+            submitting: '正在提交任务...',
+            model_default: '模型: -',
+            meta_model: '模型: -',
+            meta_time: '耗时: -',
+            qr_title: '扫码获取作品',
+            qr_desc: '用手机扫描二维码，即可查看并保存生成的作品。链接 24 小时内有效。'
+        },
+        'zh-TW': {
+            _title: 'AI 創意生成器 | YUNI',
+            nav_title: 'AI 創意生成器',
+            back_home: '返回首頁',
+            page_title: 'AI 創意生成器',
+            page_subtitle: '拍攝照片，選擇模型，一鍵生成卡通形象或創意影片',
+            tag_models: '聚合 10+ 頂級視覺模型',
+            tag_price: '統一接入，價格低至官方 50%',
+            tag_compare: '多模型效果對比',
+            camera_title: '拍照取像',
+            switch_cam: '切換',
+            camera_hint: '點擊下方按鈕開啟攝影機',
+            open_camera: '開啟攝影機',
+            capture: '拍照',
+            retake: '重拍',
+            config_title: '生成配置',
+            gen_mode: '生成模式',
+            mode_avatar: '卡通形象',
+            mode_video: '創意影片',
+            select_model: '選擇模型',
+            vendor_doubao: '豆包 Doubao',
+            vendor_kuaishou: '快手',
+            vendor_alibaba: '阿里巴巴',
+            desc_seedream5lite: '輕量高速',
+            desc_seedream45: '均衡高質',
+            desc_seedream4: '穩定可靠',
+            desc_nanbanana_pro: '專業版 · 精細寫實',
+            desc_nanbanana: '快速 · 多風格',
+            desc_nanbanana2: '新一代 · 更高品質',
+            desc_4oimage: '多功能生圖',
+            desc_flux_kontext: '上下文感知 · 精準編輯',
+            desc_seedance15pro: '增強版 · 高品質',
+            coming_soon: '即將上架',
+            desc_seedance20: '新一代旗艦',
+            desc_klingv26: '可靈 · 長影片多運鏡',
+            desc_klingv3omni: '可靈 · 全能旗艦',
+            desc_sora2: '高品質生成',
+            desc_sora2pro: '專業版',
+            desc_veo31: '高保真',
+            desc_wan26: '萬象 · 多風格',
+            scene_preset: '場景預設',
+            preset_ipo: '公司上市',
+            preset_space: '飛上太空',
+            preset_rich: '突然發大財',
+            generate: '開始生成',
+            source_title: '原始照片',
+            source_hint: '拍照或上傳後在此顯示',
+            result_title: '生成結果',
+            download: '下載',
+            result_hint: '生成結果將在此展示',
+            submitting: '正在提交任務...',
+            model_default: '模型: -',
+            meta_model: '模型: -',
+            meta_time: '耗時: -',
+            qr_title: '掃碼獲取作品',
+            qr_desc: '用手機掃描二維碼，即可查看並保存生成的作品。連結 24 小時內有效。'
+        },
+        'en': {
+            _title: 'AI Creative Generator | YUNI',
+            nav_title: 'AI Creative Generator',
+            back_home: 'Back to Home',
+            page_title: 'AI Creative Generator',
+            page_subtitle: 'Take a photo, choose a model, generate cartoon avatars or creative videos in one click',
+            tag_models: '10+ Top Visual AI Models',
+            tag_price: 'Unified Access, Up to 50% Off',
+            tag_compare: 'Multi-Model Comparison',
+            camera_title: 'Capture Photo',
+            switch_cam: 'Switch',
+            camera_hint: 'Click the button below to start the camera',
+            open_camera: 'Start Camera',
+            capture: 'Capture',
+            retake: 'Retake',
+            config_title: 'Settings',
+            gen_mode: 'Mode',
+            mode_avatar: 'Cartoon Avatar',
+            mode_video: 'Creative Video',
+            select_model: 'Select Model',
+            vendor_doubao: 'Doubao',
+            vendor_kuaishou: 'Kuaishou',
+            vendor_alibaba: 'Alibaba',
+            desc_seedream5lite: 'Lightweight & Fast',
+            desc_seedream45: 'Balanced & High Quality',
+            desc_seedream4: 'Stable & Reliable',
+            desc_nanbanana_pro: 'Pro · Fine Realism',
+            desc_nanbanana: 'Fast · Multi-Style',
+            desc_nanbanana2: 'Next Gen · Higher Quality',
+            desc_4oimage: 'Versatile Image Gen',
+            desc_flux_kontext: 'Context-Aware · Precise Edit',
+            desc_seedance15pro: 'Enhanced · High Quality',
+            coming_soon: 'Coming Soon',
+            desc_seedance20: 'Next Gen Flagship',
+            desc_klingv26: 'Kling · Long Video Multi-Cam',
+            desc_klingv3omni: 'Kling · All-in-One Flagship',
+            desc_sora2: 'High Quality Generation',
+            desc_sora2pro: 'Professional',
+            desc_veo31: 'High Fidelity',
+            desc_wan26: 'Wan · Multi-Style',
+            scene_preset: 'Scene Presets',
+            preset_ipo: 'IPO Bell Ringing',
+            preset_space: 'Fly to Space',
+            preset_rich: 'Sudden Fortune',
+            generate: 'Generate',
+            source_title: 'Original Photo',
+            source_hint: 'Displays after capture or upload',
+            result_title: 'Result',
+            download: 'Download',
+            result_hint: 'Generated result will appear here',
+            submitting: 'Submitting task...',
+            model_default: 'Model: -',
+            meta_model: 'Model: -',
+            meta_time: 'Time: -',
+            qr_title: 'Scan for Your Work',
+            qr_desc: 'Scan the QR code with your phone to view and save the generated work. Link valid for 24 hours.'
+        }
+    };
+    </script>
+    <script src="i18n.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
     <nav class="bg-white border-b border-slate-100">
@@ -62,10 +238,10 @@
             <div class="h-16 flex items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3">
                     <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
-                    <span class="text-lg font-semibold text-slate-900">AI 创意生成器</span>
+                    <span class="text-lg font-semibold text-slate-900" data-i18n="nav_title">AI 创意生成器</span>
                 </a>
                 <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> 返回首页
+                    <i class="fas fa-arrow-left mr-1"></i> <span data-i18n="back_home">返回首页</span>
                 </a>
             </div>
         </div>
@@ -74,8 +250,19 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <div class="mb-6">
-            <h1 class="text-3xl font-bold text-slate-900 mb-2">AI 创意生成器</h1>
-            <p class="text-slate-600">拍摄照片，选择模型，一键生成卡通形象或创意视频</p>
+            <h1 class="text-3xl font-bold text-slate-900 mb-2" data-i18n="page_title">AI 创意生成器</h1>
+            <p class="text-slate-600 mb-3" data-i18n="page_subtitle">拍摄照片，选择模型，一键生成卡通形象或创意视频</p>
+            <div class="flex flex-wrap gap-3">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/15 text-xs font-medium text-primary">
+                    <i class="fas fa-layer-group"></i><span data-i18n="tag_models">聚合 10+ 顶级视觉模型</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200/60 text-xs font-medium text-emerald-700">
+                    <i class="fas fa-coins"></i><span data-i18n="tag_price">统一接入，价格低至官方 50%</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200/60 text-xs font-medium text-amber-700">
+                    <i class="fas fa-bolt"></i><span data-i18n="tag_compare">多模型效果对比</span>
+                </span>
+            </div>
         </div>
 
         <div class="grid lg:grid-cols-[1fr_1fr] gap-6">
@@ -85,11 +272,11 @@
                 <section class="bg-white rounded-2xl border border-slate-200 p-5 overflow-hidden">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-base font-semibold text-slate-900">
-                            <i class="fas fa-camera mr-2 text-primary"></i>拍照取像
+                            <i class="fas fa-camera mr-2 text-primary"></i><span data-i18n="camera_title">拍照取像</span>
                         </h2>
                         <div class="flex gap-2">
                             <button id="switch-camera-btn" class="text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors" title="切换摄像头">
-                                <i class="fas fa-sync-alt mr-1"></i>切换
+                                <i class="fas fa-sync-alt mr-1"></i><span data-i18n="switch_cam">切换</span>
                             </button>
                         </div>
                     </div>
@@ -100,19 +287,19 @@
                         <img id="photo-preview" class="hidden w-full h-full object-cover absolute inset-0" alt="captured">
                         <div id="camera-placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400">
                             <i class="fas fa-video-slash text-4xl mb-3"></i>
-                            <span class="text-sm">点击下方按钮开启摄像头</span>
+                            <span class="text-sm" data-i18n="camera_hint">点击下方按钮开启摄像头</span>
                         </div>
                     </div>
 
                     <div class="flex gap-3 mt-4">
                         <button id="open-camera-btn" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors">
-                            <i class="fas fa-video mr-2"></i>开启摄像头
+                            <i class="fas fa-video mr-2"></i><span data-i18n="open_camera">开启摄像头</span>
                         </button>
                         <button id="capture-btn" class="flex-1 py-2.5 rounded-xl bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
-                            <i class="fas fa-camera mr-2"></i>拍照
+                            <i class="fas fa-camera mr-2"></i><span data-i18n="capture">拍照</span>
                         </button>
                         <button id="retake-btn" class="hidden flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors">
-                            <i class="fas fa-redo mr-2"></i>重拍
+                            <i class="fas fa-redo mr-2"></i><span data-i18n="retake">重拍</span>
                         </button>
                         <button id="upload-btn" class="py-2.5 px-4 rounded-xl border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors" title="上传照片">
                             <i class="fas fa-upload"></i>
@@ -124,128 +311,203 @@
                 <!-- 生成配置 -->
                 <section class="bg-white rounded-2xl border border-slate-200 p-5">
                     <h2 class="text-base font-semibold text-slate-900 mb-4">
-                        <i class="fas fa-sliders-h mr-2 text-primary"></i>生成配置
+                        <i class="fas fa-sliders-h mr-2 text-primary"></i><span data-i18n="config_title">生成配置</span>
                     </h2>
 
                     <!-- 生成模式 -->
                     <div class="mb-4">
-                        <label class="block text-sm text-slate-600 mb-2">生成模式</label>
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="gen_mode">生成模式</label>
                         <div class="flex bg-slate-100 rounded-xl p-1">
-                            <button class="mode-tab active flex-1 py-2 rounded-lg text-sm font-medium transition-colors" data-mode="avatar">卡通形象</button>
-                            <button class="mode-tab flex-1 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600" data-mode="video">创意视频</button>
+                            <button class="mode-tab active flex-1 py-2 rounded-lg text-sm font-medium transition-colors" data-mode="avatar" data-i18n="mode_avatar">卡通形象</button>
+                            <button class="mode-tab flex-1 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600" data-mode="video" data-i18n="mode_video">创意视频</button>
                         </div>
                     </div>
 
                     <!-- 模型选择 -->
                     <div class="mb-4">
-                        <label class="block text-sm text-slate-600 mb-2">选择模型</label>
-                        <div id="model-list" class="grid grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-1">
-                            <!-- 生图模型 -->
-                            <div class="model-card selected cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-5.0-lite" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedream 5.0 Lite <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 轻量高速</div>
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="select_model">选择模型</label>
+                        <div id="model-list" class="max-h-[380px] overflow-y-auto pr-1 space-y-3">
+
+                            <!-- ========== 生图模型 ========== -->
+
+                            <!-- 豆包 Doubao -->
+                            <div class="vendor-group" data-type="avatar">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide" data-i18n="vendor_doubao">豆包 Doubao</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card selected cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-5.0-lite" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedream 5.0 Lite <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_seedream5lite">轻量高速</div>
+                                    </div>
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4.5" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">Seedream 4.5</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_seedream45">均衡高质</div>
+                                    </div>
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">Seedream 4</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_seedream4">稳定可靠</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4.5" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Seedream 4.5</div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 均衡高质</div>
+
+                            <!-- Google -->
+                            <div class="vendor-group" data-type="avatar">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide">Google</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-pro" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">Nano Banana Pro</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_nanbanana_pro">专业版 · 精细写实</div>
+                                    </div>
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">Nano Banana</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_nanbanana">快速 · 多风格</div>
+                                    </div>
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-2" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Nano Banana 2 <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_nanbanana2">新一代 · 更高质量</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedream-4" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Seedream 4</div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 稳定可靠</div>
+
+                            <!-- OpenAI -->
+                            <div class="vendor-group" data-type="avatar">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide">OpenAI</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="4o-image" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">4o Image</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_4oimage">多功能生图</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-pro" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Nano Banana Pro</div>
-                                <div class="text-xs text-slate-500 mt-0.5">专业版 · 精细写实</div>
+
+                            <!-- Black Forest Labs -->
+                            <div class="vendor-group" data-type="avatar">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide">Black Forest Labs</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="flux-kontext" data-type="avatar">
+                                        <div class="text-sm font-medium text-slate-900">Flux Kontext</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_flux_kontext">上下文感知 · 精准编辑</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Nano Banana</div>
-                                <div class="text-xs text-slate-500 mt-0.5">快速 · 多风格</div>
+
+                            <!-- ========== 视频模型（默认隐藏） ========== -->
+
+                            <!-- 豆包 Doubao -->
+                            <div class="vendor-group hidden" data-type="video">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide" data-i18n="vendor_doubao">豆包 Doubao</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedance-1.5-pro" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Seedance 1.5 Pro</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_seedance15pro">增强版 · 高质量</div>
+                                    </div>
+                                    <div class="model-card rounded-xl border-2 border-slate-200 p-3 opacity-50 cursor-not-allowed" data-model="seedance-2.0" data-type="video" data-disabled="true">
+                                        <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedance 2.0 <span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium" data-i18n="coming_soon">即将上架</span></div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_seedance20">新一代旗舰</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="nano-banana-2" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Nano Banana 2 <span class="text-[10px] px-1.5 py-0.5 bg-primary/10 text-primary rounded-full font-medium">NEW</span></div>
-                                <div class="text-xs text-slate-500 mt-0.5">新一代 · 更高质量</div>
+
+                            <!-- 快手 -->
+                            <div class="vendor-group hidden" data-type="video">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide" data-i18n="vendor_kuaishou">快手</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="kling-v2.6" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Kling V2.6</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_klingv26">可灵 · 长视频多运镜</div>
+                                    </div>
+                                    <div class="model-card rounded-xl border-2 border-slate-200 p-3 opacity-50 cursor-not-allowed" data-model="kling-v3-omni" data-type="video" data-disabled="true">
+                                        <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Kling V3 Omni <span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium" data-i18n="coming_soon">即将上架</span></div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_klingv3omni">可灵 · 全能旗舰</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="4o-image" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">4o Image</div>
-                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 多功能生图</div>
+
+                            <!-- OpenAI -->
+                            <div class="vendor-group hidden" data-type="video">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide">OpenAI</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Sora 2</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_sora2">高质量生成</div>
+                                    </div>
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2-pro" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Sora 2 Pro</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_sora2pro">专业版</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="flux-kontext" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Flux Kontext</div>
-                                <div class="text-xs text-slate-500 mt-0.5">上下文感知 · 精准编辑</div>
+
+                            <!-- Google -->
+                            <div class="vendor-group hidden" data-type="video">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide">Google</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="veo-3.1" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Veo 3.1</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_veo31">高保真</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="flux-2" data-type="avatar">
-                                <div class="text-sm font-medium text-slate-900">Flux 2</div>
-                                <div class="text-xs text-slate-500 mt-0.5">快速 · 精细写实</div>
+
+                            <!-- 阿里巴巴 -->
+                            <div class="vendor-group hidden" data-type="video">
+                                <div class="flex items-center gap-2 mb-1.5 px-1">
+                                    <span class="text-xs font-semibold text-slate-800 tracking-wide" data-i18n="vendor_alibaba">阿里巴巴</span>
+                                    <div class="flex-1 h-px bg-slate-200"></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="model-card cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="wan-2.6" data-type="video">
+                                        <div class="text-sm font-medium text-slate-900">Wan 2.6</div>
+                                        <div class="text-xs text-slate-500 mt-0.5" data-i18n="desc_wan26">万象 · 多风格</div>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- 视频模型（默认隐藏） -->
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Sora 2</div>
-                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 高质量生成</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="sora-2-pro" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Sora 2 Pro</div>
-                                <div class="text-xs text-slate-500 mt-0.5">OpenAI · 专业版</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="veo-3.1" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Veo 3.1</div>
-                                <div class="text-xs text-slate-500 mt-0.5">Google · 高保真</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="wan-2.6" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Wan 2.6</div>
-                                <div class="text-xs text-slate-500 mt-0.5">万象 · 多风格</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedance-1.0-pro" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Seedance 1.0 Pro</div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 稳定高质</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="seedance-1.5-pro" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Seedance 1.5 Pro</div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 增强版</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3 opacity-60" data-model="seedance-2.0" data-type="video" data-disabled="true">
-                                <div class="text-sm font-medium text-slate-900 flex items-center gap-1.5">Seedance 2.0 <span class="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">即将上线</span></div>
-                                <div class="text-xs text-slate-500 mt-0.5">豆包 · 新一代</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="hailuo-02" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">MiniMax Hailuo 02</div>
-                                <div class="text-xs text-slate-500 mt-0.5">高清 · 自然运动</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="hailuo-2.3" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">MiniMax Hailuo 2.3</div>
-                                <div class="text-xs text-slate-500 mt-0.5">高清 · 流畅运镜</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="kling-v2.6" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Kling V2.6</div>
-                                <div class="text-xs text-slate-500 mt-0.5">可灵 · 长视频多运镜</div>
-                            </div>
-                            <div class="model-card hidden cursor-pointer rounded-xl border-2 border-slate-200 p-3" data-model="vidu-q3-pro" data-type="video">
-                                <div class="text-sm font-medium text-slate-900">Vidu Q3 Pro</div>
-                                <div class="text-xs text-slate-500 mt-0.5">生数 · 高质量生成</div>
-                            </div>
+
+                            <!-- 快手（已移至下方，此处留空） -->
+
                         </div>
                     </div>
 
-                    <!-- 提示词 -->
-                    <div class="mb-4">
-                        <label class="block text-sm text-slate-600 mb-2">提示词 (Prompt)</label>
-                        <textarea id="prompt-input" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none text-sm" placeholder="描述你想要的风格，例如：3D 皮克斯风格卡通形象，微笑，干净背景..."></textarea>
-                    </div>
-
-                    <!-- 风格预设 -->
-                    <div class="mb-5">
-                        <label class="block text-sm text-slate-600 mb-2">风格预设</label>
+                    <!-- 场景预设（仅视频模式显示） -->
+                    <div id="style-section" class="mb-5 hidden">
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="scene_preset">场景预设</label>
                         <div class="flex flex-wrap gap-2" id="style-presets">
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 text-primary text-xs font-medium" data-style="3D 皮克斯卡通风格">皮克斯 3D</button>
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="日系动漫风格，精致手绘">日系动漫</button>
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="扁平插画风格，简约现代">扁平插画</button>
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="水彩手绘风格，柔和自然">水彩手绘</button>
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="赛博朋克风格，霓虹光效">赛博朋克</button>
-                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="黏土风格，可爱立体">黏土风格</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 text-primary text-xs font-medium" data-style="公司上市敲钟，人物居中突出，周围人群欢呼鼓掌，电影质感运镜，人物皮肤光滑细腻轻度美颜" data-i18n="preset_ipo">公司上市</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="穿着宇航服飞上太空，星空背景，地球在身后，失重漂浮，科幻电影感，人物皮肤光滑细腻轻度美颜" data-i18n="preset_space">飞上太空</button>
+                            <button class="style-preset px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-medium hover:border-primary/30" data-style="天降金币钞票，人物惊喜表情，黄金满地，奢华场景，夸张喜庆效果，人物皮肤光滑细腻轻度美颜" data-i18n="preset_rich">突然发大财</button>
                         </div>
+                    </div>
+
+                    <!-- 提示词隐藏，由场景预设控制 -->
+                    <div id="prompt-section" class="hidden">
+                        <textarea id="prompt-input" rows="3" class="hidden"></textarea>
                     </div>
 
                     <button id="generate-btn" class="w-full py-3 bg-primary text-white rounded-xl font-medium hover:bg-primary-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed" disabled>
-                        <i class="fas fa-magic mr-2"></i>开始生成
+                        <i class="fas fa-magic mr-2"></i><span data-i18n="generate">开始生成</span>
                     </button>
                 </section>
             </div>
@@ -255,13 +517,13 @@
                 <!-- 照片预览 -->
                 <section class="bg-white rounded-2xl border border-slate-200 p-5">
                     <h2 class="text-base font-semibold text-slate-900 mb-4">
-                        <i class="fas fa-image mr-2 text-primary"></i>原始照片
+                        <i class="fas fa-image mr-2 text-primary"></i><span data-i18n="source_title">原始照片</span>
                     </h2>
                     <div class="rounded-xl overflow-hidden bg-slate-100 aspect-[4/3] flex items-center justify-center">
                         <img id="source-photo" class="hidden w-full h-full object-cover" alt="source">
                         <div id="source-placeholder" class="text-slate-400 text-center p-6">
                             <i class="fas fa-portrait text-4xl mb-3 block"></i>
-                            <span class="text-sm">拍照或上传后在此显示</span>
+                            <span class="text-sm" data-i18n="source_hint">拍照或上传后在此显示</span>
                         </div>
                     </div>
                 </section>
@@ -270,24 +532,24 @@
                 <section class="bg-white rounded-2xl border border-slate-200 p-5">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-base font-semibold text-slate-900">
-                            <i class="fas fa-wand-magic-sparkles mr-2 text-primary"></i>生成结果
+                            <i class="fas fa-wand-magic-sparkles mr-2 text-primary"></i><span data-i18n="result_title">生成结果</span>
                         </h2>
                         <button id="download-btn" class="hidden text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
-                            <i class="fas fa-download mr-1"></i>下载
+                            <i class="fas fa-download mr-1"></i><span data-i18n="download">下载</span>
                         </button>
                     </div>
                     <div id="result-area" class="rounded-xl overflow-hidden bg-slate-50 border border-slate-100 aspect-[4/3] flex items-center justify-center relative">
                         <div id="result-placeholder" class="text-slate-400 text-center p-6">
                             <i class="fas fa-sparkles text-4xl mb-3 block"></i>
-                            <span class="text-sm">生成结果将在此展示</span>
+                            <span class="text-sm" data-i18n="result_hint">生成结果将在此展示</span>
                         </div>
                         <!-- 生成中状态 -->
                         <div id="generating-state" class="hidden absolute inset-0 bg-white/90 flex flex-col items-center justify-center">
                             <div class="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin mb-4"></div>
-                            <p id="gen-status-text" class="text-slate-700 font-medium mb-1">正在提交任务...</p>
-                            <p id="gen-model-label" class="text-slate-500 text-sm">模型: -</p>
+                            <p id="gen-status-text" class="text-slate-700 font-medium mb-1" data-i18n="submitting">正在提交任务...</p>
+                            <p id="gen-model-label" class="text-slate-500 text-sm" data-i18n="model_default">模型: -</p>
                             <div class="w-48 mt-3 bg-slate-200 rounded-full h-1.5">
-                                <div id="gen-progress-bar" class="bg-primary h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                <div id="gen-progress-bar" class="bg-primary h-1.5 rounded-full" style="width: 0%"></div>
                             </div>
                             <p id="gen-progress-text" class="text-slate-400 text-xs mt-1.5">0%</p>
                         </div>
@@ -295,8 +557,8 @@
                         <video id="result-video" class="hidden w-full h-full object-cover" controls></video>
                     </div>
                     <div id="result-meta" class="hidden mt-3 flex items-center justify-between text-xs text-slate-500">
-                        <span id="meta-model">模型: -</span>
-                        <span id="meta-time">耗时: -</span>
+                        <span id="meta-model" data-i18n="meta_model">模型: -</span>
+                        <span id="meta-time" data-i18n="meta_time">耗时: -</span>
                     </div>
 
                     <!-- 二维码区域 -->
@@ -306,8 +568,8 @@
                                 <img id="qr-code" class="w-28 h-28 rounded-lg border border-slate-200" alt="QR Code">
                             </div>
                             <div class="text-sm">
-                                <p class="text-slate-900 font-medium mb-1"><i class="fas fa-qrcode mr-1.5 text-primary"></i>扫码获取作品</p>
-                                <p class="text-slate-500 text-xs leading-relaxed">用手机扫描二维码，即可查看并保存生成的作品。链接 24 小时内有效。</p>
+                                <p class="text-slate-900 font-medium mb-1"><i class="fas fa-qrcode mr-1.5 text-primary"></i><span data-i18n="qr_title">扫码获取作品</span></p>
+                                <p class="text-slate-500 text-xs leading-relaxed" data-i18n="qr_desc">用手机扫描二维码，即可查看并保存生成的作品。链接 24 小时内有效。</p>
                             </div>
                         </div>
                     </div>
@@ -434,6 +696,8 @@
             e.target.value = '';
         }
 
+        const AVATAR_DEFAULT_PROMPT = '3D 皮克斯卡通风格，人物要真实，突出特点，但是可爱，皮肤光滑细腻，轻微美颜效果，肤色均匀白皙，眼睛明亮有神';
+
         // --- Mode Tabs ---
         document.querySelectorAll('.mode-tab').forEach(tab => {
             tab.addEventListener('click', () => {
@@ -441,29 +705,37 @@
                 tab.classList.add('active');
                 currentMode = tab.dataset.mode;
                 updateModelList();
+                updatePromptVisibility();
             });
         });
 
+        function updatePromptVisibility() {
+            const styleSec = document.getElementById('style-section');
+            if (currentMode === 'avatar') {
+                styleSec.classList.add('hidden');
+            } else {
+                styleSec.classList.remove('hidden');
+            }
+        }
+
         function updateModelList() {
-            document.querySelectorAll('.model-card').forEach(card => {
-                card.classList.add('hidden');
-                card.classList.remove('selected');
-            });
-            const visible = document.querySelectorAll(`.model-card[data-type="${currentMode}"]`);
-            visible.forEach((card, i) => {
-                card.classList.remove('hidden');
-                if (i === 0) {
-                    card.classList.add('selected');
-                    selectedModel = card.dataset.model;
-                }
-            });
+            document.querySelectorAll('.vendor-group').forEach(g => g.classList.add('hidden'));
+            document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll(`.vendor-group[data-type="${currentMode}"]`).forEach(g => g.classList.remove('hidden'));
+            const firstCard = document.querySelector(`.vendor-group[data-type="${currentMode}"] .model-card`);
+            if (firstCard) {
+                firstCard.classList.add('selected');
+                selectedModel = firstCard.dataset.model;
+            }
         }
 
         // --- Model Selection ---
         document.getElementById('model-list').addEventListener('click', (e) => {
             const card = e.target.closest('.model-card');
-            if (!card || card.classList.contains('hidden') || card.dataset.disabled === 'true') return;
-            document.querySelectorAll(`.model-card[data-type="${currentMode}"]`).forEach(c => c.classList.remove('selected'));
+            if (!card || card.dataset.disabled === 'true') return;
+            const group = card.closest('.vendor-group');
+            if (!group || group.classList.contains('hidden')) return;
+            document.querySelectorAll(`.vendor-group[data-type="${currentMode}"] .model-card`).forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             selectedModel = card.dataset.model;
         });
@@ -486,23 +758,86 @@
             'seedream-5.0-lite': 'Seedream 5.0 Lite', 'seedream-4.5': 'Seedream 4.5',
             'seedream-4': 'Seedream 4', 'nano-banana-pro': 'Nano Banana Pro',
             'nano-banana': 'Nano Banana', 'nano-banana-2': 'Nano Banana 2',
-            '4o-image': '4o Image', 'flux-kontext': 'Flux Kontext', 'flux-2': 'Flux 2',
+            '4o-image': '4o Image', 'flux-kontext': 'Flux Kontext',
             'sora-2': 'Sora 2', 'sora-2-pro': 'Sora 2 Pro',
             'veo-3.1': 'Veo 3.1', 'wan-2.6': 'Wan 2.6',
-            'seedance-1.0-pro': 'Seedance 1.0 Pro', 'seedance-1.5-pro': 'Seedance 1.5 Pro',
-            'seedance-2.0': 'Seedance 2.0', 'hailuo-02': 'MiniMax Hailuo 02',
-            'hailuo-2.3': 'MiniMax Hailuo 2.3', 'kling-v2.6': 'Kling V2.6',
-            'vidu-q3-pro': 'Vidu Q3 Pro',
+            'seedance-1.5-pro': 'Seedance 1.5 Pro', 'kling-v2.6': 'Kling V2.6',
         };
 
         let pollingTimer = null;
+        let fakeProgress = 0;
+        let fakeProgressRAF = null;
+        let fakeProgressTarget = 0;
+        let fakeProgressDone = false;
+
+        function startFakeProgress() {
+            fakeProgress = 0;
+            fakeProgressTarget = 0;
+            fakeProgressDone = false;
+            const bar = document.getElementById('gen-progress-bar');
+            const txt = document.getElementById('gen-progress-text');
+            const startTs = Date.now();
+
+            function tick() {
+                if (fakeProgressDone) return;
+                const elapsed = (Date.now() - startTs) / 1000;
+
+                let natural;
+                if (elapsed < 3) {
+                    natural = elapsed * 3;
+                } else if (elapsed < 10) {
+                    natural = 9 + (elapsed - 3) * 4;
+                } else if (elapsed < 30) {
+                    natural = 37 + (elapsed - 10) * 2;
+                } else if (elapsed < 60) {
+                    natural = 77 + (elapsed - 30) * 0.3;
+                } else {
+                    natural = 86 + Math.min((elapsed - 60) * 0.05, 6);
+                }
+
+                const ceiling = Math.max(natural, fakeProgressTarget);
+                const capped = Math.min(ceiling, 92);
+
+                fakeProgress += (capped - fakeProgress) * 0.08;
+                fakeProgress = Math.min(fakeProgress, 92);
+
+                const display = Math.round(fakeProgress);
+                bar.style.width = display + '%';
+                txt.textContent = display + '%';
+
+                fakeProgressRAF = requestAnimationFrame(tick);
+            }
+            fakeProgressRAF = requestAnimationFrame(tick);
+        }
+
+        function bumpFakeTarget(realPct) {
+            fakeProgressTarget = Math.max(fakeProgressTarget, realPct);
+        }
+
+        function finishFakeProgress() {
+            fakeProgressDone = true;
+            if (fakeProgressRAF) cancelAnimationFrame(fakeProgressRAF);
+            const bar = document.getElementById('gen-progress-bar');
+            const txt = document.getElementById('gen-progress-text');
+            bar.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            bar.style.width = '100%';
+            txt.textContent = '100%';
+            setTimeout(() => { bar.style.transition = ''; }, 700);
+        }
+
+        function stopFakeProgress() {
+            fakeProgressDone = true;
+            if (fakeProgressRAF) cancelAnimationFrame(fakeProgressRAF);
+        }
 
         document.getElementById('generate-btn').addEventListener('click', generate);
 
         async function generate() {
             if (!capturedBlob) return;
 
-            const prompt = promptInput.value.trim() || '卡通风格';
+            const prompt = currentMode === 'avatar'
+                ? AVATAR_DEFAULT_PROMPT
+                : (promptInput.value.trim() || '公司上市敲钟，人物居中突出，周围人群欢呼鼓掌，电影质感运镜，人物皮肤光滑细腻轻度美颜');
             const btn = document.getElementById('generate-btn');
             const genState = document.getElementById('generating-state');
 
@@ -510,7 +845,7 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>提交中...';
             resetResultArea();
             genState.classList.remove('hidden');
-            setGenProgress(0, '正在提交任务...');
+            setGenStatus('正在提交任务...');
             document.getElementById('gen-model-label').textContent =
                 `模型: ${MODEL_NAMES[selectedModel] || selectedModel}`;
 
@@ -523,6 +858,8 @@
             const startTime = Date.now();
 
             try {
+                startFakeProgress();
+
                 const resp = await fetch(`${API_BASE}/api/generate`, {
                     method: 'POST',
                     body: formData,
@@ -536,11 +873,13 @@
                 if (!task_id) throw new Error('未获取到 task_id');
 
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>生成中...';
-                setGenProgress(5, '任务已提交，等待处理...');
+                setGenStatus('任务已提交，等待处理...');
+                bumpFakeTarget(8);
 
                 await pollTask(task_id, startTime);
 
             } catch (err) {
+                stopFakeProgress();
                 showError(err.message);
             }
 
@@ -569,24 +908,26 @@
                 const { status, progress } = data;
 
                 if (status === 'pending') {
-                    setGenProgress(Math.max(progress || 5, 5), '排队等待中...');
+                    setGenStatus('排队等待中...');
+                    bumpFakeTarget(Math.max(progress || 10, 10));
                 } else if (status === 'processing') {
-                    setGenProgress(Math.max(progress || 20, 20), '正在生成中...');
+                    setGenStatus('正在生成中...');
+                    bumpFakeTarget(Math.max(progress || 30, 30));
                 } else if (status === 'completed') {
-                    setGenProgress(100, '生成完成！');
+                    finishFakeProgress();
+                    setGenStatus('生成完成！');
                     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-                    await sleep(500);
+                    await sleep(800);
                     showResult(data, elapsed);
                     return;
                 } else if (status === 'failed') {
+                    stopFakeProgress();
                     throw new Error(data.error || '生成失败，请更换模型或重试');
                 }
             }
         }
 
-        function setGenProgress(pct, text) {
-            document.getElementById('gen-progress-bar').style.width = pct + '%';
-            document.getElementById('gen-progress-text').textContent = pct + '%';
+        function setGenStatus(text) {
             document.getElementById('gen-status-text').textContent = text;
         }
 

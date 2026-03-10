@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能客服助手 | YUNI</title>
+    <title>智能客服 Agent | YUNI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
@@ -24,6 +24,110 @@
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         .gradient-bg { background: #6A3AB7; }
     </style>
+    <script>
+    window.PAGE_TRANSLATIONS = {
+        'zh-CN': {
+            _title: '智能客服 Agent | YUNI',
+            nav_title: '智能客服 Agent',
+            back_home: '返回首页',
+            badge: '客服回复与 FAQ 生成',
+            page_title: '智能客服 Agent',
+            page_desc: '用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。',
+            section_input: '客服场景输入',
+            label_scenario: '场景类型',
+            opt_presales: '售前咨询',
+            opt_aftersales: '售后处理',
+            opt_refund: '退款申请',
+            opt_complaint: '投诉安抚',
+            label_channel: '渠道',
+            opt_online: '在线客服',
+            opt_email: '邮件',
+            opt_whatsapp: 'WhatsApp',
+            opt_wechat: '微信',
+            label_issue: '客户问题',
+            placeholder_issue: '请输入客户咨询或投诉内容...',
+            btn_generate: '生成客服回复',
+            result_title: '输出结果',
+            result_badge: '演示界面',
+            result_placeholder: '输入客户问题后，可生成客服回复、处理建议与 FAQ 分类预览。',
+            err_empty: '请先输入客户问题。',
+            result_scenario_info: '场景信息',
+            result_suggested_reply: '建议回复',
+            result_handling_tips: '处理建议',
+            reply_template: '您好，感谢您的反馈。关于您提到的"{issue}"，我们已经收到并会尽快协助处理。为确保问题得到妥善跟进，我们建议先确认订单/账户信息，并由专员进一步联系您。',
+            tip1: '优先记录问题背景与客户期望结果',
+            tip2: '根据场景提供标准回复模板与升级流程',
+            tip3: '同步归档为 FAQ，便于后续复用'
+        },
+        'zh-TW': {
+            _title: '智能客服 Agent | YUNI',
+            nav_title: '智能客服 Agent',
+            back_home: '返回首頁',
+            badge: '客服回覆與 FAQ 生成',
+            page_title: '智能客服 Agent',
+            page_desc: '用於生成客服回覆、處理建議和 FAQ 歸類，適合售前諮詢、售後處理、投訴安撫等場景。',
+            section_input: '客服場景輸入',
+            label_scenario: '場景類型',
+            opt_presales: '售前諮詢',
+            opt_aftersales: '售後處理',
+            opt_refund: '退款申請',
+            opt_complaint: '投訴安撫',
+            label_channel: '渠道',
+            opt_online: '線上客服',
+            opt_email: '郵件',
+            opt_whatsapp: 'WhatsApp',
+            opt_wechat: '微信',
+            label_issue: '客戶問題',
+            placeholder_issue: '請輸入客戶諮詢或投訴內容...',
+            btn_generate: '生成客服回覆',
+            result_title: '輸出結果',
+            result_badge: '演示介面',
+            result_placeholder: '輸入客戶問題後，可生成客服回覆、處理建議與 FAQ 分類預覽。',
+            err_empty: '請先輸入客戶問題。',
+            result_scenario_info: '場景資訊',
+            result_suggested_reply: '建議回覆',
+            result_handling_tips: '處理建議',
+            reply_template: '您好，感謝您的回饋。關於您提到的「{issue}」，我們已收到並會盡快協助處理。為確保問題得到妥善跟進，我們建議先確認訂單/帳戶資訊，並由專員進一步聯繫您。',
+            tip1: '優先記錄問題背景與客戶期望結果',
+            tip2: '根據場景提供標準回覆模板與升級流程',
+            tip3: '同步歸檔為 FAQ，便於後續複用'
+        },
+        'en': {
+            _title: 'Smart Customer Service Agent | YUNI',
+            nav_title: 'Smart Customer Service Agent',
+            back_home: 'Back to Home',
+            badge: 'Customer Service Replies & FAQ Generation',
+            page_title: 'Smart Customer Service Agent',
+            page_desc: 'Generates customer service replies, handling suggestions, and FAQ categorization. Suitable for pre-sales inquiries, after-sales support, refund requests, and complaint handling.',
+            section_input: 'Customer Service Scenario Input',
+            label_scenario: 'Scenario Type',
+            opt_presales: 'Pre-sales inquiry',
+            opt_aftersales: 'After-sales support',
+            opt_refund: 'Refund request',
+            opt_complaint: 'Complaint handling',
+            label_channel: 'Channel',
+            opt_online: 'Online chat',
+            opt_email: 'Email',
+            opt_whatsapp: 'WhatsApp',
+            opt_wechat: 'WeChat',
+            label_issue: 'Customer Issue',
+            placeholder_issue: 'Enter customer inquiry or complaint...',
+            btn_generate: 'Generate Reply',
+            result_title: 'Output Result',
+            result_badge: 'Demo',
+            result_placeholder: 'Enter a customer issue to generate a reply, handling suggestions, and FAQ preview.',
+            err_empty: 'Please enter a customer issue first.',
+            result_scenario_info: 'Scenario Info',
+            result_suggested_reply: 'Suggested Reply',
+            result_handling_tips: 'Handling Suggestions',
+            reply_template: 'Thank you for your feedback. Regarding "{issue}", we have received it and will assist you as soon as possible. To ensure proper follow-up, we recommend verifying your order/account information first, and our specialist will contact you shortly.',
+            tip1: 'Record the issue background and customer expectations first',
+            tip2: 'Provide standard reply templates and escalation procedures per scenario',
+            tip3: 'Archive as FAQ for future reuse'
+        }
+    };
+    </script>
+    <script src="i18n.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
     <nav class="bg-white border-b border-slate-100">
@@ -31,10 +135,10 @@
             <div class="h-16 flex items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3">
                     <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
-                    <span class="text-lg font-semibold text-slate-900">智能客服助手</span>
+                    <span class="text-lg font-semibold text-slate-900" data-i18n="nav_title">智能客服 Agent</span>
                 </a>
                 <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> 返回首页
+                    <i class="fas fa-arrow-left mr-1"></i> <span data-i18n="back_home">返回首页</span>
                 </a>
             </div>
         </div>
@@ -42,42 +146,42 @@
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="mb-8">
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4" data-i18n="badge">
                 客服回复与 FAQ 生成
             </div>
-            <h1 class="text-4xl font-bold text-slate-900 mb-3">智能客服助手</h1>
-            <p class="text-slate-600 max-w-3xl">用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。</p>
+            <h1 class="text-4xl font-bold text-slate-900 mb-3" data-i18n="page_title">智能客服 Agent</h1>
+            <p class="text-slate-600 max-w-3xl" data-i18n="page_desc">用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。</p>
         </div>
 
         <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
             <section class="bg-white rounded-2xl border border-slate-200 p-6">
-                <h2 class="text-lg font-semibold text-slate-900 mb-5">客服场景输入</h2>
+                <h2 class="text-lg font-semibold text-slate-900 mb-5" data-i18n="section_input">客服场景输入</h2>
                 <div class="space-y-4">
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm text-slate-600 mb-2">场景类型</label>
+                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_scenario">场景类型</label>
                             <select id="scenario" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option>售前咨询</option>
-                                <option>售后处理</option>
-                                <option>退款申请</option>
-                                <option>投诉安抚</option>
+                                <option value="opt_presales" data-i18n="opt_presales">售前咨询</option>
+                                <option value="opt_aftersales" data-i18n="opt_aftersales">售后处理</option>
+                                <option value="opt_refund" data-i18n="opt_refund">退款申请</option>
+                                <option value="opt_complaint" data-i18n="opt_complaint">投诉安抚</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm text-slate-600 mb-2">渠道</label>
+                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_channel">渠道</label>
                             <select id="channel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option>在线客服</option>
-                                <option>邮件</option>
-                                <option>WhatsApp</option>
-                                <option>微信</option>
+                                <option value="opt_online" data-i18n="opt_online">在线客服</option>
+                                <option value="opt_email" data-i18n="opt_email">邮件</option>
+                                <option value="opt_whatsapp" data-i18n="opt_whatsapp">WhatsApp</option>
+                                <option value="opt_wechat" data-i18n="opt_wechat">微信</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm text-slate-600 mb-2">客户问题</label>
-                        <textarea id="customer-issue" rows="9" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" placeholder="请输入客户咨询或投诉内容..."></textarea>
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="label_issue">客户问题</label>
+                        <textarea id="customer-issue" rows="9" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" data-i18n="placeholder_issue" placeholder="请输入客户咨询或投诉内容..."></textarea>
                     </div>
-                    <button id="reply-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors">
+                    <button id="reply-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors" data-i18n="btn_generate">
                         生成客服回复
                     </button>
                 </div>
@@ -85,10 +189,10 @@
 
             <section class="bg-white rounded-2xl border border-slate-200 p-6">
                 <div class="flex items-center justify-between mb-5">
-                    <h2 class="text-lg font-semibold text-slate-900">输出结果</h2>
-                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500">演示界面</span>
+                    <h2 class="text-lg font-semibold text-slate-900" data-i18n="result_title">输出结果</h2>
+                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500" data-i18n="result_badge">演示界面</span>
                 </div>
-                <div id="reply-result" class="rounded-2xl bg-slate-50 border border-slate-100 p-5 min-h-[420px] text-slate-700 leading-7">
+                <div id="reply-result" class="rounded-2xl bg-slate-50 border border-slate-100 p-5 min-h-[420px] text-slate-700 leading-7" data-i18n="result_placeholder">
                     输入客户问题后，可生成客服回复、处理建议与 FAQ 分类预览。
                 </div>
             </section>
@@ -99,32 +203,42 @@
         const replyBtn = document.getElementById('reply-btn');
         const replyResult = document.getElementById('reply-result');
 
+        function t(key) {
+            const lang = window.YuniI18n ? window.YuniI18n.getLang() : 'zh-CN';
+            const dict = (window.PAGE_TRANSLATIONS || {})[lang] || {};
+            return dict[key] !== undefined ? dict[key] : key;
+        }
+
         replyBtn.addEventListener('click', () => {
-            const scenario = document.getElementById('scenario').value;
-            const channel = document.getElementById('channel').value;
+            const scenarioKey = document.getElementById('scenario').value;
+            const channelKey = document.getElementById('channel').value;
+            const scenarioLabel = t(scenarioKey);
+            const channelLabel = t(channelKey);
             const issue = document.getElementById('customer-issue').value.trim();
 
             if (!issue) {
-                replyResult.innerHTML = '<span class="text-slate-400">请先输入客户问题。</span>';
+                replyResult.innerHTML = '<span class="text-slate-400">' + t('err_empty') + '</span>';
                 return;
             }
+
+            const replyText = t('reply_template').replace('{issue}', issue);
 
             replyResult.innerHTML = `
                 <div class="space-y-4">
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">场景信息</div>
-                        <div class="text-slate-900 font-medium">${scenario} / ${channel}</div>
+                        <div class="text-sm text-slate-500 mb-1">${t('result_scenario_info')}</div>
+                        <div class="text-slate-900 font-medium">${scenarioLabel} / ${channelLabel}</div>
                     </div>
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">建议回复</div>
-                        <div class="whitespace-pre-wrap">您好，感谢您的反馈。关于您提到的“${issue}”，我们已经收到并会尽快协助处理。为确保问题得到妥善跟进，我们建议先确认订单/账户信息，并由专员进一步联系您。</div>
+                        <div class="text-sm text-slate-500 mb-1">${t('result_suggested_reply')}</div>
+                        <div class="whitespace-pre-wrap">${replyText}</div>
                     </div>
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">处理建议</div>
+                        <div class="text-sm text-slate-500 mb-1">${t('result_handling_tips')}</div>
                         <ul class="list-disc pl-5 space-y-1">
-                            <li>优先记录问题背景与客户期望结果</li>
-                            <li>根据场景提供标准回复模板与升级流程</li>
-                            <li>同步归档为 FAQ，便于后续复用</li>
+                            <li>${t('tip1')}</li>
+                            <li>${t('tip2')}</li>
+                            <li>${t('tip3')}</li>
                         </ul>
                     </div>
                 </div>

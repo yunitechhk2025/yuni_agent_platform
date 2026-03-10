@@ -108,6 +108,95 @@
             border-radius: 3px;
         }
     </style>
+    <script>
+    window.PAGE_TRANSLATIONS = {
+        'zh-CN': {
+            _title: '企业知识库自服务 | YUNI Tech',
+            nav_brand: 'YuniTech',
+            nav_back: '返回平台',
+            title_main: '企业知识库<span class="gradient-text">自服务</span>',
+            subtitle: '上传企业文档，构建专属知识库，基于自有知识智能问答',
+            upload_heading: '上传文档',
+            upload_drag: '拖拽文件到此处，或 <span class="text-primary font-medium">点击选择</span>',
+            upload_formats: '支持 PDF、Word、TXT、Markdown、Excel 等格式',
+            upload_progress: '上传中...',
+            file_heading: '知识库文件',
+            file_count_tpl: '共 {n} 个文件',
+            th_filename: '文件名',
+            th_size: '大小',
+            th_time: '上传时间',
+            th_action: '操作',
+            empty_file: '暂无文件，请先上传文档',
+            chat_heading: '智能问答',
+            chat_desc: '基于已上传的知识库文档进行智能问答',
+            chat_greeting: '您好！我是企业知识库 Agent。上传文档后，您可以向我提问，我将基于知识库内容为您解答。',
+            chat_placeholder: '输入您的问题...',
+            footer_powered: 'Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a>',
+            btn_delete_title: '删除',
+            alert_file_format: '请上传支持的文件格式：PDF、Word、TXT、Markdown、Excel',
+            answer_empty: '请先上传知识库文档。上传文档后，我将基于文档内容为您提供智能问答服务。',
+            answer_with_files: '已收到您的问题：「{q}」。\n\n当前知识库共有 {n} 个文档。完整问答功能需对接后端知识库 API，届时将基于您上传的文档内容进行智能检索与回答。',
+            error_request: '请求失败：'
+        },
+        'zh-TW': {
+            _title: '企業知識庫自服務 | YUNI Tech',
+            nav_brand: 'YuniTech',
+            nav_back: '返回平台',
+            title_main: '企業知識庫<span class="gradient-text">自服務</span>',
+            subtitle: '上傳企業文件，建構專屬知識庫，基於自有知識智能問答',
+            upload_heading: '上傳文件',
+            upload_drag: '拖曳檔案到此處，或 <span class="text-primary font-medium">點擊選擇</span>',
+            upload_formats: '支援 PDF、Word、TXT、Markdown、Excel 等格式',
+            upload_progress: '上傳中...',
+            file_heading: '知識庫文件',
+            file_count_tpl: '共 {n} 個文件',
+            th_filename: '檔名',
+            th_size: '大小',
+            th_time: '上傳時間',
+            th_action: '操作',
+            empty_file: '暫無文件，請先上傳文件',
+            chat_heading: '智能問答',
+            chat_desc: '基於已上傳的知識庫文件進行智能問答',
+            chat_greeting: '您好！我是企業知識庫 Agent。上傳文件後，您可以向我提問，我將基於知識庫內容為您解答。',
+            chat_placeholder: '輸入您的問題...',
+            footer_powered: 'Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a>',
+            btn_delete_title: '刪除',
+            alert_file_format: '請上傳支援的檔案格式：PDF、Word、TXT、Markdown、Excel',
+            answer_empty: '請先上傳知識庫文件。上傳文件後，我將基於文件內容為您提供智能問答服務。',
+            answer_with_files: '已收到您的問題：「{q}」。\n\n目前知識庫共有 {n} 個文件。完整問答功能需對接後端知識庫 API，屆時將基於您上傳的文件內容進行智能檢索與回答。',
+            error_request: '請求失敗：'
+        },
+        'en': {
+            _title: 'Enterprise Knowledge Base Self-Service | YUNI Tech',
+            nav_brand: 'YuniTech',
+            nav_back: 'Back to Platform',
+            title_main: 'Enterprise Knowledge Base<span class="gradient-text">Self-Service</span>',
+            subtitle: 'Upload documents, build your knowledge base, and get intelligent Q&A based on your own knowledge',
+            upload_heading: 'Upload Documents',
+            upload_drag: 'Drag files here, or <span class="text-primary font-medium">click to select</span>',
+            upload_formats: 'Supports PDF, Word, TXT, Markdown, Excel and more',
+            upload_progress: 'Uploading...',
+            file_heading: 'Knowledge Base Files',
+            file_count_tpl: '{n} file(s)',
+            th_filename: 'File Name',
+            th_size: 'Size',
+            th_time: 'Upload Time',
+            th_action: 'Actions',
+            empty_file: 'No files yet. Please upload documents first.',
+            chat_heading: 'Smart Q&A',
+            chat_desc: 'Intelligent Q&A based on your uploaded knowledge base documents',
+            chat_greeting: 'Hello! I am your Enterprise Knowledge Base Agent. After uploading documents, you can ask me questions and I will answer based on the knowledge base content.',
+            chat_placeholder: 'Enter your question...',
+            footer_powered: 'Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a>',
+            btn_delete_title: 'Delete',
+            alert_file_format: 'Please upload supported file formats: PDF, Word, TXT, Markdown, Excel',
+            answer_empty: 'Please upload knowledge base documents first. After uploading, I will provide intelligent Q&A based on the document content.',
+            answer_with_files: 'I received your question: "{q}".\n\nThere are currently {n} document(s) in the knowledge base. Full Q&A requires backend API integration to retrieve and answer based on your uploaded documents.',
+            error_request: 'Request failed: '
+        }
+    };
+    </script>
+    <script src="i18n.js"></script>
 </head>
 <body class="hero-pattern min-h-screen">
     <!-- Navigation -->
@@ -118,11 +207,11 @@
                     <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
                         <span class="text-white font-bold text-sm">Y</span>
                     </div>
-                    <span class="text-lg font-bold text-dark">YuniTech</span>
+                    <span class="text-lg font-bold text-dark" data-i18n="nav_brand">YuniTech</span>
                 </a>
                 <div class="flex items-center space-x-4">
                     <a href="index.html" class="text-gray-600 hover:text-primary transition-colors text-sm">
-                        <i class="fas fa-arrow-left mr-1"></i> 返回平台
+                        <i class="fas fa-arrow-left mr-1"></i> <span data-i18n="nav_back">返回平台</span>
                     </a>
                 </div>
             </div>
@@ -133,10 +222,10 @@
     <main class="max-w-6xl mx-auto px-4 py-8">
         <!-- Header -->
         <div class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-dark mb-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-dark mb-4" data-i18n="title_main">
                 企业知识库<span class="gradient-text">自服务</span>
             </h1>
-            <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto" data-i18n="subtitle">
                 上传企业文档，构建专属知识库，基于自有知识智能问答
             </p>
         </div>
@@ -148,7 +237,7 @@
                 <div class="glass-card rounded-2xl p-6 shadow-xl">
                     <h2 class="text-lg font-bold text-dark mb-4 flex items-center">
                         <i class="fas fa-cloud-upload-alt text-primary mr-2"></i>
-                        上传文档
+                        <span data-i18n="upload_heading">上传文档</span>
                     </h2>
                     <div id="upload-zone" class="upload-zone rounded-xl p-10 text-center cursor-pointer">
                         <input type="file" id="file-input" multiple accept=".pdf,.doc,.docx,.txt,.md,.xlsx,.xls,.csv" class="hidden">
@@ -156,14 +245,14 @@
                             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                                 <i class="fas fa-file-upload text-3xl text-primary"></i>
                             </div>
-                            <p class="text-gray-600 mb-1">拖拽文件到此处，或 <span class="text-primary font-medium">点击选择</span></p>
-                            <p class="text-gray-400 text-sm">支持 PDF、Word、TXT、Markdown、Excel 等格式</p>
+                            <p class="text-gray-600 mb-1" data-i18n="upload_drag">拖拽文件到此处，或 <span class="text-primary font-medium">点击选择</span></p>
+                            <p class="text-gray-400 text-sm" data-i18n="upload_formats">支持 PDF、Word、TXT、Markdown、Excel 等格式</p>
                         </div>
                         <div id="upload-progress" class="hidden">
                             <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                                 <i class="fas fa-spinner fa-spin text-3xl text-primary"></i>
                             </div>
-                            <p class="text-gray-600 mb-2">上传中...</p>
+                            <p class="text-gray-600 mb-2" data-i18n="upload_progress">上传中...</p>
                             <div class="w-full bg-gray-200 rounded-full h-2 max-w-xs mx-auto">
                                 <div id="progress-bar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                             </div>
@@ -176,7 +265,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-lg font-bold text-dark flex items-center">
                             <i class="fas fa-folder-open text-primary mr-2"></i>
-                            知识库文件
+                            <span data-i18n="file_heading">知识库文件</span>
                         </h2>
                         <span id="file-count" class="text-sm text-gray-500">共 0 个文件</span>
                     </div>
@@ -184,17 +273,17 @@
                         <table class="w-full text-sm">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-3 text-left font-medium text-gray-600">文件名</th>
-                                    <th class="px-4 py-3 text-left font-medium text-gray-600">大小</th>
-                                    <th class="px-4 py-3 text-left font-medium text-gray-600">上传时间</th>
-                                    <th class="px-4 py-3 text-right font-medium text-gray-600">操作</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600" data-i18n="th_filename">文件名</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600" data-i18n="th_size">大小</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600" data-i18n="th_time">上传时间</th>
+                                    <th class="px-4 py-3 text-right font-medium text-gray-600" data-i18n="th_action">操作</th>
                                 </tr>
                             </thead>
                             <tbody id="file-list">
                                 <tr id="empty-row">
                                     <td colspan="4" class="px-4 py-12 text-center text-gray-400">
                                         <i class="fas fa-inbox text-4xl mb-2 block opacity-50"></i>
-                                        暂无文件，请先上传文档
+                                        <span data-i18n="empty_file">暂无文件，请先上传文档</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -208,20 +297,21 @@
                 <div class="glass-card rounded-2xl p-6 shadow-xl h-full flex flex-col">
                     <h2 class="text-lg font-bold text-dark mb-4 flex items-center">
                         <i class="fas fa-comments text-primary mr-2"></i>
-                        智能问答
+                        <span data-i18n="chat_heading">智能问答</span>
                     </h2>
-                    <p class="text-gray-500 text-sm mb-4">基于已上传的知识库文档进行智能问答</p>
+                    <p class="text-gray-500 text-sm mb-4" data-i18n="chat_desc">基于已上传的知识库文档进行智能问答</p>
                     
                     <div id="chat-messages" class="chat-container flex-1 space-y-4 mb-4 p-2">
                         <div class="flex justify-start">
                             <div class="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%]">
-                                <p class="text-gray-700 text-sm">您好！我是企业知识库助手。上传文档后，您可以向我提问，我将基于知识库内容为您解答。</p>
+                                <p class="text-gray-700 text-sm" data-i18n="chat_greeting">您好！我是企业知识库 Agent。上传文档后，您可以向我提问，我将基于知识库内容为您解答。</p>
                             </div>
                         </div>
                     </div>
                     
                     <div class="flex space-x-2">
                         <input type="text" id="chat-input" 
+                               data-i18n="chat_placeholder"
                                placeholder="输入您的问题..." 
                                class="flex-1 px-4 py-3 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
                         <button id="send-btn" onclick="sendQuestion()"
@@ -236,11 +326,12 @@
 
     <!-- Footer -->
     <footer class="py-8 text-center text-gray-500 text-sm mt-12">
-        <p>Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a></p>
+        <p data-i18n="footer_powered">Powered by <a href="https://yunitechhk.com/" class="text-primary hover:underline">Yuni Tech Limited</a></p>
     </footer>
 
     <script src="config.js"></script>
     <script>
+        function t(k) { const lang = (window.YuniI18n && window.YuniI18n.getLang()) || 'zh-CN'; const d = (window.PAGE_TRANSLATIONS || {})[lang] || {}; return d[k] !== undefined ? d[k] : k; }
         const API_BASE = CONFIG.API_BASE;
         const STORAGE_KEY = 'knowledge_base_files';
         
@@ -281,14 +372,14 @@
             const emptyRow = document.getElementById('empty-row');
             const fileCount = document.getElementById('file-count');
             
-            fileCount.textContent = `共 ${files.length} 个文件`;
+            fileCount.textContent = t('file_count_tpl').replace('{n}', files.length);
             
             if (files.length === 0) {
                 tbody.innerHTML = `
                     <tr id="empty-row">
                         <td colspan="4" class="px-4 py-12 text-center text-gray-400">
                             <i class="fas fa-inbox text-4xl mb-2 block opacity-50"></i>
-                            暂无文件，请先上传文档
+                            ${t('empty_file')}
                         </td>
                     </tr>
                 `;
@@ -304,7 +395,7 @@
                     <td class="px-4 py-3 text-gray-600">${formatSize(f.size)}</td>
                     <td class="px-4 py-3 text-gray-600">${formatDate(f.uploadTime)}</td>
                     <td class="px-4 py-3 text-right">
-                        <button onclick="deleteFile('${f.id}')" class="text-red-500 hover:text-red-600 p-1 rounded hover:bg-red-50" title="删除">
+                        <button onclick="deleteFile('${f.id}')" class="text-red-500 hover:text-red-600 p-1 rounded hover:bg-red-50" title="${t('btn_delete_title')}">
                             <i class="fas fa-trash-alt text-sm"></i>
                         </button>
                     </td>
@@ -366,7 +457,7 @@
             });
             
             if (validFiles.length === 0) {
-                alert('请上传支持的文件格式：PDF、Word、TXT、Markdown、Excel');
+                alert(t('alert_file_format'));
                 return;
             }
             
@@ -443,9 +534,9 @@
                 const files = loadFiles();
                 let answer;
                 if (files.length === 0) {
-                    answer = '请先上传知识库文档。上传文档后，我将基于文档内容为您提供智能问答服务。';
+                    answer = t('answer_empty');
                 } else {
-                    answer = `已收到您的问题：「${query}」。\n\n当前知识库共有 ${files.length} 个文档。完整问答功能需对接后端知识库 API，届时将基于您上传的文档内容进行智能检索与回答。`;
+                    answer = t('answer_with_files').replace('{q}', query).replace('{n}', files.length);
                 }
                 
                 document.getElementById('typing-indicator')?.remove();
@@ -461,7 +552,7 @@
                 messagesDiv.insertAdjacentHTML('beforeend', `
                     <div class="flex justify-start">
                         <div class="bg-red-50 text-red-600 rounded-2xl rounded-tl-sm px-4 py-3 max-w-[90%] text-sm">
-                            请求失败：${escapeHtml(e.message)}
+                            ${t('error_request')}${escapeHtml(e.message)}
                         </div>
                     </div>
                 `);
@@ -475,6 +566,8 @@
         document.getElementById('chat-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') sendQuestion();
         });
+        
+        window.addEventListener('yuni-lang-changed', () => renderFileList());
         
         // 初始化
         renderFileList();

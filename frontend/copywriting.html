@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>多语言文案助手 | YUNI</title>
+    <title>多语言文案 Agent | YUNI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
@@ -25,6 +25,122 @@
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         .gradient-bg { background: #6A3AB7; }
     </style>
+    <script>
+    window.PAGE_TRANSLATIONS = {
+        'zh-CN': {
+            _title: '多语言文案 Agent | YUNI',
+            nav_title: '多语言文案 Agent',
+            back_home: '返回首页',
+            badge: '中英粤商务文案生成',
+            page_title: '多语言文案 Agent',
+            page_desc: '适用于品牌介绍、活动宣传、社媒文案与邮件场景，支持一键生成多语言版本与统一语气。',
+            config_title: '文案配置',
+            label_content_type: '文案类型',
+            opt_brand: '品牌介绍',
+            opt_product: '产品卖点',
+            opt_campaign: '活动推广',
+            opt_social: '社交媒体文案',
+            opt_email: '邮件营销',
+            label_language: '目标语言',
+            opt_zh_cn: '简体中文',
+            opt_en: 'English',
+            opt_cantonese: '粤语',
+            opt_bilingual: '中英双语',
+            label_tone: '语气风格',
+            opt_formal: '专业正式',
+            opt_premium: '高端简洁',
+            opt_friendly: '亲和自然',
+            opt_marketing: '营销转化',
+            label_core: '核心内容',
+            placeholder_brief: '请输入产品/服务信息、目标受众、想突出的卖点...',
+            btn_generate: '生成文案',
+            result_title: '生成结果',
+            result_badge: '演示界面',
+            result_placeholder: '请选择配置并输入内容，点击"生成文案"查看预览。',
+            err_empty: '请先输入核心内容。',
+            label_gen_config: '生成配置',
+            label_recommended_title: '推荐标题',
+            sample_title: '让品牌表达更清晰，让传播更有效',
+            label_preview: '文案预览',
+            preview_tpl: '基于您提供的信息，我们建议采用"{tone}"语气，围绕核心卖点进行精炼表达。\n\n{brief}\n\n这是一段适合用于{type}场景的示例文案，已按{language}输出逻辑进行结构规划，可继续接入正式生成接口。'
+        },
+        'zh-TW': {
+            _title: '多語言文案 Agent | YUNI',
+            nav_title: '多語言文案 Agent',
+            back_home: '返回首頁',
+            badge: '中英粵商務文案生成',
+            page_title: '多語言文案 Agent',
+            page_desc: '適用於品牌介紹、活動宣傳、社媒文案與郵件場景，支援一鍵生成多語言版本與統一語氣。',
+            config_title: '文案配置',
+            label_content_type: '文案類型',
+            opt_brand: '品牌介紹',
+            opt_product: '產品賣點',
+            opt_campaign: '活動推廣',
+            opt_social: '社群媒體文案',
+            opt_email: '郵件行銷',
+            label_language: '目標語言',
+            opt_zh_cn: '簡體中文',
+            opt_en: 'English',
+            opt_cantonese: '粵語',
+            opt_bilingual: '中英雙語',
+            label_tone: '語氣風格',
+            opt_formal: '專業正式',
+            opt_premium: '高端簡潔',
+            opt_friendly: '親和自然',
+            opt_marketing: '行銷轉化',
+            label_core: '核心內容',
+            placeholder_brief: '請輸入產品/服務資訊、目標受眾、想突出的賣點...',
+            btn_generate: '生成文案',
+            result_title: '生成結果',
+            result_badge: '演示介面',
+            result_placeholder: '請選擇配置並輸入內容，點擊「生成文案」查看預覽。',
+            err_empty: '請先輸入核心內容。',
+            label_gen_config: '生成配置',
+            label_recommended_title: '推薦標題',
+            sample_title: '讓品牌表達更清晰，讓傳播更有效',
+            label_preview: '文案預覽',
+            preview_tpl: '基於您提供的資訊，我們建議採用「{tone}」語氣，圍繞核心賣點進行精煉表達。\n\n{brief}\n\n這是一段適合用於{type}場景的範例文案，已按{language}輸出邏輯進行結構規劃，可繼續接入正式生成介面。'
+        },
+        'en': {
+            _title: 'Multilingual Copywriting Agent | YUNI',
+            nav_title: 'Multilingual Copywriting Agent',
+            back_home: 'Back to Home',
+            badge: 'Chinese, English & Cantonese Business Copy',
+            page_title: 'Multilingual Copywriting Agent',
+            page_desc: 'For brand intros, campaigns, social media, and email. Generate multi-language versions with consistent tone in one click.',
+            config_title: 'Copy Configuration',
+            label_content_type: 'Content Type',
+            opt_brand: 'Brand Introduction',
+            opt_product: 'Product Highlights',
+            opt_campaign: 'Campaign Promotion',
+            opt_social: 'Social Media Copy',
+            opt_email: 'Email Marketing',
+            label_language: 'Target Language',
+            opt_zh_cn: 'Simplified Chinese',
+            opt_en: 'English',
+            opt_cantonese: 'Cantonese',
+            opt_bilingual: 'Chinese & English',
+            label_tone: 'Tone & Style',
+            opt_formal: 'Professional & Formal',
+            opt_premium: 'Premium & Concise',
+            opt_friendly: 'Warm & Natural',
+            opt_marketing: 'Conversion-Focused',
+            label_core: 'Core Content',
+            placeholder_brief: 'Enter product/service info, target audience, key selling points...',
+            btn_generate: 'Generate Copy',
+            result_title: 'Generated Result',
+            result_badge: 'Demo',
+            result_placeholder: 'Configure options, enter content, then click "Generate Copy" to preview.',
+            err_empty: 'Please enter core content first.',
+            label_gen_config: 'Configuration',
+            label_recommended_title: 'Suggested Title',
+            sample_title: 'Clear brand expression, effective communication',
+            label_preview: 'Copy Preview',
+            preview_tpl: 'Based on your input, we recommend a "{tone}" tone to refine your key selling points.\n\n{brief}\n\nThis is a sample copy for {type} in {language}, structured for your scenario. Ready to connect to the full generation API.'
+        }
+    };
+    </script>
+    <script src="i18n.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
     <nav class="bg-white border-b border-slate-100">
@@ -32,10 +148,10 @@
             <div class="h-16 flex items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3">
                     <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
-                    <span class="text-lg font-semibold text-slate-900">多语言文案助手</span>
+                    <span class="text-lg font-semibold text-slate-900" data-i18n="nav_title">多语言文案 Agent</span>
                 </a>
                 <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
-                    <i class="fas fa-arrow-left mr-1"></i> 返回首页
+                    <i class="fas fa-arrow-left mr-1"></i> <span data-i18n="back_home">返回首页</span>
                 </a>
             </div>
         </div>
@@ -43,52 +159,52 @@
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div class="mb-8">
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4" data-i18n="badge">
                 中英粤商务文案生成
             </div>
-            <h1 class="text-4xl font-bold text-slate-900 mb-3">多语言文案助手</h1>
-            <p class="text-slate-600 max-w-3xl">适用于品牌介绍、活动宣传、社媒文案与邮件场景，支持一键生成多语言版本与统一语气。</p>
+            <h1 class="text-4xl font-bold text-slate-900 mb-3" data-i18n="page_title">多语言文案 Agent</h1>
+            <p class="text-slate-600 max-w-3xl" data-i18n="page_desc">适用于品牌介绍、活动宣传、社媒文案与邮件场景，支持一键生成多语言版本与统一语气。</p>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-6">
             <section class="bg-white rounded-2xl border border-slate-200 p-6">
-                <h2 class="text-lg font-semibold text-slate-900 mb-5">文案配置</h2>
+                <h2 class="text-lg font-semibold text-slate-900 mb-5" data-i18n="config_title">文案配置</h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm text-slate-600 mb-2">文案类型</label>
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="label_content_type">文案类型</label>
                         <select id="content-type" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                            <option>品牌介绍</option>
-                            <option>产品卖点</option>
-                            <option>活动推广</option>
-                            <option>社交媒体文案</option>
-                            <option>邮件营销</option>
+                            <option data-i18n="opt_brand">品牌介绍</option>
+                            <option data-i18n="opt_product">产品卖点</option>
+                            <option data-i18n="opt_campaign">活动推广</option>
+                            <option data-i18n="opt_social">社交媒体文案</option>
+                            <option data-i18n="opt_email">邮件营销</option>
                         </select>
                     </div>
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm text-slate-600 mb-2">目标语言</label>
+                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_language">目标语言</label>
                             <select id="language" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option>简体中文</option>
-                                <option>English</option>
-                                <option>粤语</option>
-                                <option>中英双语</option>
+                                <option data-i18n="opt_zh_cn">简体中文</option>
+                                <option data-i18n="opt_en">English</option>
+                                <option data-i18n="opt_cantonese">粤语</option>
+                                <option data-i18n="opt_bilingual">中英双语</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm text-slate-600 mb-2">语气风格</label>
+                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_tone">语气风格</label>
                             <select id="tone" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option>专业正式</option>
-                                <option>高端简洁</option>
-                                <option>亲和自然</option>
-                                <option>营销转化</option>
+                                <option data-i18n="opt_formal">专业正式</option>
+                                <option data-i18n="opt_premium">高端简洁</option>
+                                <option data-i18n="opt_friendly">亲和自然</option>
+                                <option data-i18n="opt_marketing">营销转化</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm text-slate-600 mb-2">核心内容</label>
-                        <textarea id="brief" rows="8" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" placeholder="请输入产品/服务信息、目标受众、想突出的卖点..."></textarea>
+                        <label class="block text-sm text-slate-600 mb-2" data-i18n="label_core">核心内容</label>
+                        <textarea id="brief" rows="8" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" data-i18n="placeholder_brief" placeholder="请输入产品/服务信息、目标受众、想突出的卖点..."></textarea>
                     </div>
-                    <button id="generate-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors">
+                    <button id="generate-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors" data-i18n="btn_generate">
                         生成文案
                     </button>
                 </div>
@@ -96,17 +212,18 @@
 
             <section class="bg-white rounded-2xl border border-slate-200 p-6">
                 <div class="flex items-center justify-between mb-5">
-                    <h2 class="text-lg font-semibold text-slate-900">生成结果</h2>
-                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500">演示界面</span>
+                    <h2 class="text-lg font-semibold text-slate-900" data-i18n="result_title">生成结果</h2>
+                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500" data-i18n="result_badge">演示界面</span>
                 </div>
                 <div id="result" class="rounded-2xl bg-slate-50 border border-slate-100 p-5 min-h-[420px] text-slate-700 leading-7">
-                    请选择配置并输入内容，点击“生成文案”查看预览。
+                    <span data-i18n="result_placeholder">请选择配置并输入内容，点击“生成文案”查看预览。</span>
                 </div>
             </section>
         </div>
     </main>
 
     <script>
+        function t(k) { const lang = (window.YuniI18n && window.YuniI18n.getLang()) || 'zh-CN'; const d = (window.PAGE_TRANSLATIONS || {})[lang] || {}; return d[k] !== undefined ? d[k] : k; }
         const generateBtn = document.getElementById('generate-btn');
         const result = document.getElementById('result');
 
@@ -117,23 +234,23 @@
             const brief = document.getElementById('brief').value.trim();
 
             if (!brief) {
-                result.innerHTML = '<span class="text-slate-400">请先输入核心内容。</span>';
+                result.innerHTML = '<span class="text-slate-400">' + t('err_empty') + '</span>';
                 return;
             }
 
             result.innerHTML = `
                 <div class="space-y-4">
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">生成配置</div>
+                        <div class="text-sm text-slate-500 mb-1">` + t('label_gen_config') + `</div>
                         <div class="text-slate-900 font-medium">${type} / ${language} / ${tone}</div>
                     </div>
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">推荐标题</div>
-                        <div class="text-slate-900 font-semibold">让品牌表达更清晰，让传播更有效</div>
+                        <div class="text-sm text-slate-500 mb-1">` + t('label_recommended_title') + `</div>
+                        <div class="text-slate-900 font-semibold">` + t('sample_title') + `</div>
                     </div>
                     <div>
-                        <div class="text-sm text-slate-500 mb-1">文案预览</div>
-                        <div class="whitespace-pre-wrap">基于您提供的信息，我们建议采用“${tone}”语气，围绕核心卖点进行精炼表达。\n\n${brief}\n\n这是一段适合用于${type}场景的示例文案，已按${language}输出逻辑进行结构规划，可继续接入正式生成接口。</div>
+                        <div class="text-sm text-slate-500 mb-1">` + t('label_preview') + `</div>
+                        <div class="whitespace-pre-wrap">` + (t('preview_tpl').replace(/\{tone\}/g, tone).replace(/\{brief\}/g, brief).replace(/\{type\}/g, type).replace(/\{language\}/g, language)) + `</div>
                     </div>
                 </div>
             `;

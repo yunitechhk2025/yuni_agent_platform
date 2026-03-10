@@ -380,28 +380,22 @@ MODEL_NAME_MAP = {
     "nano-banana-2":     "gemini-3.1-flash-image-preview",
     "4o-image":          "gpt-4o-image",
     "flux-kontext":      "flux-kontext-pro",
-    "flux-2":            "flux-2",
     "sora-2":            "sora-2",
     "sora-2-pro":        "sora-2-pro",
-    "veo-3.1":           "veo-3",
-    "wan-2.6":           "wan-2.6",
-    "seedance-1.0-pro":  "doubao-seedance-1-0-pro",
+    "veo-3.1":           "veo3.1-fast",
+    "wan-2.6":           "wan2.6",
     "seedance-1.5-pro":  "doubao-seedance-1-5-pro",
-    "hailuo-02":         "minimax-hailuo-02",
-    "hailuo-2.3":        "minimax-hailuo-2.3",
-    "kling-v2.6":        "kling-v2.6",
-    "vidu-q3-pro":       "vidu-q3-pro",
+    "kling-v2.6":        "kling-v2-6",
 }
 
 AVATAR_MODELS = {
     "seedream-5.0-lite", "seedream-4.5", "seedream-4",
     "nano-banana-pro", "nano-banana", "nano-banana-2",
-    "4o-image", "flux-kontext", "flux-2",
+    "4o-image", "flux-kontext",
 }
 VIDEO_MODELS = {
     "sora-2", "sora-2-pro", "veo-3.1", "wan-2.6",
-    "seedance-1.0-pro", "seedance-1.5-pro",
-    "hailuo-02", "hailuo-2.3", "kling-v2.6", "vidu-q3-pro",
+    "seedance-1.5-pro", "kling-v2.6",
 }
 
 
@@ -422,6 +416,22 @@ async def serve_upload(filename: str):
     return FileResponse(fpath)
 
 
+async def _upload_to_tmphost(image_bytes: bytes, filename: str = "photo.jpg") -> str:
+    """Upload image to Litterbox (catbox.moe, 24h expiry), return public HTTPS URL."""
+    import httpx as _httpx
+    async with _httpx.AsyncClient(timeout=30.0) as c:
+        resp = await c.post(
+            "https://litterbox.catbox.moe/resources/internals/api.php",
+            data={"reqtype": "fileupload", "time": "24h"},
+            files={"fileToUpload": (filename, image_bytes, "image/jpeg")},
+        )
+        resp.raise_for_status()
+        url = resp.text.strip()
+        if not url.startswith("http"):
+            raise ValueError(f"Unexpected response: {url[:200]}")
+        return url
+
+
 @app.post("/api/generate")
 async def generate_creative(
     image: UploadFile = File(...),
@@ -432,6 +442,9 @@ async def generate_creative(
     """
     Submit a generation task to APIMart. Returns a task_id for polling.
     """
+    import logging
+    logger = logging.getLogger("uvicorn.error")
+
     if not GENERATE_API_KEY:
         raise HTTPException(status_code=500, detail="GENERATE_API_KEY 未配置，请在 .env 中填写")
 
@@ -441,11 +454,12 @@ async def generate_creative(
 
     api_model = MODEL_NAME_MAP.get(model, model)
     image_bytes = await image.read()
-
-    b64 = base64.b64encode(image_bytes).decode()
-    image_ref = f"data:image/jpeg;base64,{b64}"
+    img_kb = len(image_bytes) / 1024
 
     if mode == "avatar":
+        b64 = base64.b64encode(image_bytes).decode()
+        image_ref = f"data:image/jpeg;base64,{b64}"
+        logger.info(f"[Generate] model={model} -> api_model={api_model}, mode=avatar, image={img_kb:.0f}KB, prompt={prompt[:60]}")
         payload = {
             "model": api_model,
             "prompt": prompt or "3D cartoon style character",
@@ -455,29 +469,42 @@ async def generate_creative(
         }
         endpoint = f"{APIMART_BASE}/images/generations"
     else:
+        try:
+            image_url = await _upload_to_tmphost(image_bytes)
+            logger.info(f"[Generate] uploaded image to {image_url}")
+        except Exception as e:
+            logger.error(f"[Generate] image upload failed: {e}")
+            raise HTTPException(status_code=500, detail=f"图片上传失败: {e}")
+
+        logger.info(f"[Generate] model={model} -> api_model={api_model}, mode=video, image={img_kb:.0f}KB, prompt={prompt[:60]}")
         payload = {
             "model": api_model,
             "prompt": prompt or "Animated video from photo",
             "duration": 5,
             "aspect_ratio": "16:9",
-            "image_urls": [image_ref],
+            "image_urls": [image_url],
         }
         endpoint = f"{APIMART_BASE}/videos/generations"
 
     resp = await http_client.post(endpoint, headers=_apimart_headers(), json=payload)
     data = resp.json()
 
+    logger.info(f"[Generate] APIMart response: status={resp.status_code}, body={str(data)[:300]}")
+
     if resp.status_code != 200 or "error" in data:
         err = data.get("error", {})
+        detail = err.get("message", f"APIMart 请求失败: {data}")
+        logger.error(f"[Generate] FAILED: {detail}")
         raise HTTPException(
             status_code=resp.status_code or 500,
-            detail=err.get("message", f"APIMart 请求失败: {data}"),
+            detail=detail,
         )
 
     task_id = data.get("data", [{}])[0].get("task_id")
     if not task_id:
         raise HTTPException(status_code=500, detail=f"未获取到 task_id: {data}")
 
+    logger.info(f"[Generate] task_id={task_id}")
     return {"task_id": task_id, "model": model, "mode": mode}
 
 
@@ -486,6 +513,9 @@ async def get_task_status(task_id: str):
     """
     Poll APIMart task status. Returns status + result when completed.
     """
+    import logging
+    logger = logging.getLogger("uvicorn.error")
+
     if not GENERATE_API_KEY:
         raise HTTPException(status_code=500, detail="GENERATE_API_KEY 未配置")
 
@@ -521,10 +551,12 @@ async def get_task_status(task_id: str):
             result["video_url"] = urls[0] if urls else None
             result["thumbnail_url"] = task_result.get("thumbnail_url")
         result["actual_time"] = task.get("actual_time")
+        logger.info(f"[Task] {task_id} completed, time={task.get('actual_time')}s")
 
     if task.get("status") == "failed":
         err = task.get("error", {})
         result["error"] = err.get("message", "生成失败")
+        logger.error(f"[Task] {task_id} FAILED: code={err.get('code')}, msg={err.get('message')}")
 
     return result
 
@@ -588,6 +620,19 @@ async def serve_logo():
     if not logo_path.exists():
         logo_path = BASE_DIR / "logo.png"
     return FileResponse(logo_path)
+
+
+@app.get("/i18n.js")
+async def serve_i18n():
+    return FileResponse(FRONTEND_DIR / "i18n.js")
+
+
+@app.get("/config.js")
+async def serve_config():
+    config_path = FRONTEND_DIR / "config.js"
+    if config_path.exists():
+        return FileResponse(config_path)
+    return FileResponse(BASE_DIR / "config.js") if (BASE_DIR / "config.js").exists() else HTTPException(404)
 
 
 if FRONTEND_DIR.exists():
