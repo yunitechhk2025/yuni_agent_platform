@@ -8,7 +8,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
 import httpx
-from fastapi import FastAPI, HTTPException, APIRouter, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, APIRouter, UploadFile, File, Form, Request
 from fastapi.responses import StreamingResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -641,11 +641,15 @@ async def serve_i18n():
 
 
 @app.get("/config.js")
-async def serve_config():
-    """动态返回 config.js，API_BASE 使用 PUBLIC_BASE_URL，部署到 Render 时前端可正确调用同域名 API"""
+async def serve_config(request: Request):
+    """动态返回 config.js。本地开发时用当前请求的 origin，部署时用 PUBLIC_BASE_URL"""
+    base = PUBLIC_BASE_URL.rstrip("/")
+    # 本地开发：若请求来自 localhost，用当前访问的 origin，避免端口不一致
+    if "localhost" in base or "127.0.0.1" in base:
+        base = str(request.base_url).rstrip("/")
     js = f"""// API 配置（由后端动态注入）
 const CONFIG = {{
-    API_BASE: '{PUBLIC_BASE_URL.rstrip("/")}',
+    API_BASE: '{base}',
 }};
 if (typeof module !== 'undefined' && module.exports) {{
     module.exports = CONFIG;

@@ -537,9 +537,6 @@
                         <h2 class="text-base font-semibold text-slate-900">
                             <i class="fas fa-wand-magic-sparkles mr-2 text-primary"></i><span data-i18n="result_title">生成结果</span>
                         </h2>
-                        <button id="download-btn" class="hidden text-xs px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
-                            <i class="fas fa-download mr-1"></i><span data-i18n="download">下载</span>
-                        </button>
                     </div>
                     <div id="result-area" class="rounded-xl overflow-hidden bg-slate-50 border border-slate-100 aspect-[4/3] flex items-center justify-center relative">
                         <div id="result-placeholder" class="text-slate-400 text-center p-6">
@@ -938,7 +935,6 @@
             document.getElementById('result-placeholder').classList.add('hidden');
             document.getElementById('result-image').classList.add('hidden');
             document.getElementById('result-video').classList.add('hidden');
-            document.getElementById('download-btn').classList.add('hidden');
             document.getElementById('result-meta').classList.add('hidden');
             document.getElementById('qr-section').classList.add('hidden');
         }
@@ -951,15 +947,11 @@
                 const img = document.getElementById('result-image');
                 img.src = data.image_url;
                 img.classList.remove('hidden');
-                document.getElementById('download-btn').classList.remove('hidden');
-                document.getElementById('download-btn').onclick = () => downloadFile(data.image_url, 'avatar.png');
             } else if (data.video_url) {
                 const vid = document.getElementById('result-video');
                 vid.src = data.video_url;
                 vid.classList.remove('hidden');
                 vid.load();
-                document.getElementById('download-btn').classList.remove('hidden');
-                document.getElementById('download-btn').onclick = () => downloadFile(data.video_url, 'video.mp4');
             } else {
                 document.getElementById('result-placeholder').classList.remove('hidden');
                 document.getElementById('result-placeholder').innerHTML = `
@@ -995,12 +987,6 @@
             document.getElementById('qr-section').classList.remove('hidden');
         }
 
-        function downloadFile(url, filename) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-        }
 
         function sleep(ms) {
             return new Promise(r => setTimeout(r, ms));
