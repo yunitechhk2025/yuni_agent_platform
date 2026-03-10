@@ -366,7 +366,8 @@ app.include_router(investment_router)
 
 APIMART_BASE = "https://api.apimart.ai/v1"
 GENERATE_API_KEY = os.getenv("GENERATE_API_KEY", "")
-PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:8000")
+# Render 自动提供 RENDER_EXTERNAL_URL；自定义域名时在 Render 设置 PUBLIC_BASE_URL
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL") or os.getenv("RENDER_EXTERNAL_URL") or "http://localhost:8000"
 
 UPLOADS_DIR = BASE_DIR / "uploads"
 UPLOADS_DIR.mkdir(exist_ok=True)
@@ -641,10 +642,17 @@ async def serve_i18n():
 
 @app.get("/config.js")
 async def serve_config():
-    config_path = FRONTEND_DIR / "config.js"
-    if config_path.exists():
-        return FileResponse(config_path)
-    return FileResponse(BASE_DIR / "config.js") if (BASE_DIR / "config.js").exists() else HTTPException(404)
+    """动态返回 config.js，API_BASE 使用 PUBLIC_BASE_URL，部署到 Render 时前端可正确调用同域名 API"""
+    js = f"""// API 配置（由后端动态注入）
+const CONFIG = {{
+    API_BASE: '{PUBLIC_BASE_URL.rstrip("/")}',
+}};
+if (typeof module !== 'undefined' && module.exports) {{
+    module.exports = CONFIG;
+}}
+"""
+    from fastapi.responses import Response
+    return Response(content=js, media_type="application/javascript")
 
 
 if FRONTEND_DIR.exists():
