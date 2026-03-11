@@ -478,13 +478,22 @@ async def generate_creative(
             raise HTTPException(status_code=500, detail=f"图片上传失败: {e}")
 
         logger.info(f"[Generate] model={model} -> api_model={api_model}, mode=video, image={img_kb:.0f}KB, prompt={prompt[:60]}")
+
+        # sora-2 / sora-2-pro require at least 10 s; others default to 5 s
+        SORA_MODELS = {"sora-2", "sora-2-pro"}
+        duration = 10 if model in SORA_MODELS else 5
+
         payload = {
             "model": api_model,
             "prompt": prompt or "Animated video from photo",
-            "duration": 5,
-            "aspect_ratio": "16:9",
+            "duration": duration,
             "image_urls": [image_url],
         }
+
+        # wan2.6 image-to-video does not accept aspect_ratio
+        if model != "wan-2.6":
+            payload["aspect_ratio"] = "16:9"
+
         endpoint = f"{APIMART_BASE}/videos/generations"
 
     resp = await http_client.post(endpoint, headers=_apimart_headers(), json=payload)
