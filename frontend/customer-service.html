@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能客服 Agent | YUNI</title>
+    <title>Cross-Border E-Commerce AI CS | YUNI</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script>
         tailwind.config = {
@@ -26,119 +27,123 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         .gradient-bg { background: #6A3AB7; }
+
+        .chat-area {
+            height: 55vh;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+        .chat-area::-webkit-scrollbar { width: 6px; }
+        .chat-area::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+        .chat-area::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .msg-user { background: #6A3AB7; }
+        .msg-ai { background: #f8fafc; border: 1px solid #e2e8f0; }
+
+        .typing-dot { animation: bounce 1.4s infinite ease-in-out; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+
+        .markdown-content { line-height: 1.7; color: #374151; }
+        .markdown-content h1 { font-size: 1.5rem; font-weight: 700; color: #1e293b; margin: 1.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e2e8f0; }
+        .markdown-content h2 { font-size: 1.25rem; font-weight: 600; color: #334155; margin: 1.25rem 0 0.75rem; }
+        .markdown-content h3 { font-size: 1.1rem; font-weight: 600; color: #475569; margin: 1rem 0 0.5rem; }
+        .markdown-content p { margin: 0.75rem 0; }
+        .markdown-content ul, .markdown-content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+        .markdown-content li { margin: 0.375rem 0; }
+        .markdown-content ul li { list-style-type: disc; }
+        .markdown-content ol li { list-style-type: decimal; }
+        .markdown-content strong { font-weight: 600; color: #1e293b; }
+        .markdown-content code { background: #f1f5f9; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.875rem; }
+        .markdown-content pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1rem 0; }
+        .markdown-content pre code { background: transparent; padding: 0; color: inherit; }
+        .markdown-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; }
+        .markdown-content th, .markdown-content td { border: 1px solid #e2e8f0; padding: 0.5rem 0.75rem; text-align: left; }
+        .markdown-content th { background: #f8fafc; font-weight: 600; }
+        .markdown-content blockquote { border-left: 4px solid #6A3AB7; padding-left: 1rem; margin: 1rem 0; color: #64748b; }
+        .markdown-content a { color: #6A3AB7; text-decoration: underline; }
+
+        .lang-badge { transition: all .15s; }
+        .lang-badge.active { background: #6A3AB7; color: #fff; }
     </style>
     <script>
     window.PAGE_TRANSLATIONS = {
         'zh-CN': {
-            _title: '智能客服 Agent | YUNI',
-            nav_title: '智能客服 Agent',
+            _title: 'Cross-Border E-Commerce AI CS | YUNI',
+            nav_title: '出海电商 AI 客服',
             back_home: '返回首页',
-            badge: '客服回复与 FAQ 生成',
-            page_title: '智能客服 Agent',
-            page_desc: '用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。',
-            section_input: '客服场景输入',
-            label_scenario: '场景类型',
-            opt_presales: '售前咨询',
-            opt_aftersales: '售后处理',
-            opt_refund: '退款申请',
-            opt_complaint: '投诉安抚',
-            label_channel: '渠道',
-            opt_online: '在线客服',
-            opt_email: '邮件',
-            opt_whatsapp: 'WhatsApp',
-            opt_wechat: '微信',
-            label_issue: '客户问题',
-            placeholder_issue: '请输入客户咨询或投诉内容...',
-            btn_generate: '生成客服回复',
-            result_title: '输出结果',
-            result_badge: '演示界面',
-            result_placeholder: '输入客户问题后，可生成客服回复、处理建议与 FAQ 分类预览。',
-            err_empty: '请先输入客户问题。',
-            result_scenario_info: '场景信息',
-            result_suggested_reply: '建议回复',
-            result_handling_tips: '处理建议',
-            reply_template: '您好，感谢您的反馈。关于您提到的"{issue}"，我们已经收到并会尽快协助处理。为确保问题得到妥善跟进，我们建议先确认订单/账户信息，并由专员进一步联系您。',
-            tip1: '优先记录问题背景与客户期望结果',
-            tip2: '根据场景提供标准回复模板与升级流程',
-            tip3: '同步归档为 FAQ，便于后续复用'
+            badge: '跨境电商智能客服',
+            page_title: '出海电商 AI 客服',
+            page_subtitle: 'Cross-Border E-Commerce AI CS',
+            page_desc: '专为全球家具品牌打造的 AI 客服系统，支持实时自动翻译、多语言售前咨询与售后支持，助力品牌高效出海。',
+            section_chat: '智能对话',
+            label_lang: '客户语言',
+            chat_greeting: '您好！我是出海电商 AI 客服，专注于全球家具品牌的多语言客户服务。请输入客户的咨询内容（支持任意语言），我将为您生成专业的客服回复。',
+            chat_placeholder: '输入客户咨询内容（支持任意语言）...',
+            section_features: '核心能力',
+            feat1_title: '实时自动翻译',
+            feat1_desc: '自动识别客户语言并翻译，回复自动转为客户母语。',
+            feat2_title: '家具行业知识',
+            feat2_desc: '内置家具材质、尺寸、物流等行业专属知识库。',
+            feat3_title: '多场景覆盖',
+            feat3_desc: '售前咨询、订单跟踪、退换货、投诉处理一站搞定。'
         },
         'zh-TW': {
-            _title: '智能客服 Agent | YUNI',
-            nav_title: '智能客服 Agent',
+            _title: 'Cross-Border E-Commerce AI CS | YUNI',
+            nav_title: '出海電商 AI 客服',
             back_home: '返回首頁',
-            badge: '客服回覆與 FAQ 生成',
-            page_title: '智能客服 Agent',
-            page_desc: '用於生成客服回覆、處理建議和 FAQ 歸類，適合售前諮詢、售後處理、投訴安撫等場景。',
-            section_input: '客服場景輸入',
-            label_scenario: '場景類型',
-            opt_presales: '售前諮詢',
-            opt_aftersales: '售後處理',
-            opt_refund: '退款申請',
-            opt_complaint: '投訴安撫',
-            label_channel: '渠道',
-            opt_online: '線上客服',
-            opt_email: '郵件',
-            opt_whatsapp: 'WhatsApp',
-            opt_wechat: '微信',
-            label_issue: '客戶問題',
-            placeholder_issue: '請輸入客戶諮詢或投訴內容...',
-            btn_generate: '生成客服回覆',
-            result_title: '輸出結果',
-            result_badge: '演示介面',
-            result_placeholder: '輸入客戶問題後，可生成客服回覆、處理建議與 FAQ 分類預覽。',
-            err_empty: '請先輸入客戶問題。',
-            result_scenario_info: '場景資訊',
-            result_suggested_reply: '建議回覆',
-            result_handling_tips: '處理建議',
-            reply_template: '您好，感謝您的回饋。關於您提到的「{issue}」，我們已收到並會盡快協助處理。為確保問題得到妥善跟進，我們建議先確認訂單/帳戶資訊，並由專員進一步聯繫您。',
-            tip1: '優先記錄問題背景與客戶期望結果',
-            tip2: '根據場景提供標準回覆模板與升級流程',
-            tip3: '同步歸檔為 FAQ，便於後續複用'
+            badge: '跨境電商智能客服',
+            page_title: '出海電商 AI 客服',
+            page_subtitle: 'Cross-Border E-Commerce AI CS',
+            page_desc: '專為全球傢具品牌打造的 AI 客服系統，支持即時自動翻譯、多語言售前諮詢與售後支持，助力品牌高效出海。',
+            section_chat: '智能對話',
+            label_lang: '客戶語言',
+            chat_greeting: '您好！我是出海電商 AI 客服，專注於全球傢具品牌的多語言客戶服務。請輸入客戶的諮詢內容（支持任意語言），我將為您生成專業的客服回覆。',
+            chat_placeholder: '輸入客戶諮詢內容（支持任意語言）...',
+            section_features: '核心能力',
+            feat1_title: '即時自動翻譯',
+            feat1_desc: '自動識別客戶語言並翻譯，回覆自動轉為客戶母語。',
+            feat2_title: '傢具行業知識',
+            feat2_desc: '內置傢具材質、尺寸、物流等行業專屬知識庫。',
+            feat3_title: '多場景覆蓋',
+            feat3_desc: '售前諮詢、訂單追蹤、退換貨、投訴處理一站搞定。'
         },
         'en': {
-            _title: 'Smart Customer Service Agent | YUNI',
-            nav_title: 'Smart Customer Service Agent',
+            _title: 'Cross-Border E-Commerce AI CS | YUNI',
+            nav_title: 'Cross-Border AI CS',
             back_home: 'Back to Home',
-            badge: 'Customer Service Replies & FAQ Generation',
-            page_title: 'Smart Customer Service Agent',
-            page_desc: 'Generates customer service replies, handling suggestions, and FAQ categorization. Suitable for pre-sales inquiries, after-sales support, refund requests, and complaint handling.',
-            section_input: 'Customer Service Scenario Input',
-            label_scenario: 'Scenario Type',
-            opt_presales: 'Pre-sales inquiry',
-            opt_aftersales: 'After-sales support',
-            opt_refund: 'Refund request',
-            opt_complaint: 'Complaint handling',
-            label_channel: 'Channel',
-            opt_online: 'Online chat',
-            opt_email: 'Email',
-            opt_whatsapp: 'WhatsApp',
-            opt_wechat: 'WeChat',
-            label_issue: 'Customer Issue',
-            placeholder_issue: 'Enter customer inquiry or complaint...',
-            btn_generate: 'Generate Reply',
-            result_title: 'Output Result',
-            result_badge: 'Demo',
-            result_placeholder: 'Enter a customer issue to generate a reply, handling suggestions, and FAQ preview.',
-            err_empty: 'Please enter a customer issue first.',
-            result_scenario_info: 'Scenario Info',
-            result_suggested_reply: 'Suggested Reply',
-            result_handling_tips: 'Handling Suggestions',
-            reply_template: 'Thank you for your feedback. Regarding "{issue}", we have received it and will assist you as soon as possible. To ensure proper follow-up, we recommend verifying your order/account information first, and our specialist will contact you shortly.',
-            tip1: 'Record the issue background and customer expectations first',
-            tip2: 'Provide standard reply templates and escalation procedures per scenario',
-            tip3: 'Archive as FAQ for future reuse'
+            badge: 'Cross-Border E-Commerce AI Customer Service',
+            page_title: 'Cross-Border E-Commerce AI CS',
+            page_subtitle: 'Global Furniture Brands',
+            page_desc: 'Specialized AI customer service for global furniture brands. Features real-time auto-translation, multilingual pre-sales and after-sales support.',
+            section_chat: 'Smart Chat',
+            label_lang: 'Customer Language',
+            chat_greeting: 'Hello! I\'m the Cross-Border E-Commerce AI CS agent, specialized in multilingual customer service for global furniture brands. Enter a customer inquiry in any language and I\'ll generate a professional response.',
+            chat_placeholder: 'Enter customer inquiry (any language supported)...',
+            section_features: 'Core Capabilities',
+            feat1_title: 'Real-time Auto-Translation',
+            feat1_desc: 'Automatically detects customer language, translates and replies in their native tongue.',
+            feat2_title: 'Furniture Industry Knowledge',
+            feat2_desc: 'Built-in knowledge base covering materials, dimensions, logistics and more.',
+            feat3_title: 'Multi-Scenario Coverage',
+            feat3_desc: 'Pre-sales inquiry, order tracking, returns, and complaint handling — all in one place.'
         }
     };
     </script>
     <script src="i18n.js"></script>
+    <script src="config.js"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
-    <nav class="bg-white border-b border-slate-100">
+    <nav class="bg-white border-b border-slate-100 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="h-16 flex items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3">
                     <img src="logo.png" alt="YUNI" class="h-10 w-auto mt-1.5">
-                    <span class="text-lg font-semibold text-slate-900" data-i18n="nav_title">智能客服 Agent</span>
+                    <span class="text-lg font-semibold text-slate-900" data-i18n="nav_title">出海电商 AI 客服</span>
                 </a>
                 <a href="index.html" class="text-slate-600 hover:text-primary transition-colors text-sm">
                     <i class="fas fa-arrow-left mr-1"></i> <span data-i18n="back_home">返回首页</span>
@@ -148,105 +153,217 @@
     </nav>
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <!-- Header -->
         <div class="mb-8">
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4" data-i18n="badge">
-                客服回复与 FAQ 生成
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+                <i class="fas fa-globe mr-2"></i>
+                <span data-i18n="badge">跨境电商智能客服</span>
             </div>
-            <h1 class="text-4xl font-bold text-slate-900 mb-3" data-i18n="page_title">智能客服 Agent</h1>
-            <p class="text-slate-600 max-w-3xl" data-i18n="page_desc">用于生成客服回复、处理建议和 FAQ 归类，适合售前咨询、售后处理、投诉安抚等场景。</p>
+            <h1 class="text-4xl font-bold text-slate-900 mb-1" data-i18n="page_title">出海电商 AI 客服</h1>
+            <p class="text-lg text-primary font-medium mb-3" data-i18n="page_subtitle">Cross-Border E-Commerce AI CS</p>
+            <p class="text-slate-600 max-w-3xl" data-i18n="page_desc">专为全球家具品牌打造的 AI 客服系统，支持实时自动翻译、多语言售前咨询与售后支持，助力品牌高效出海。</p>
         </div>
 
-        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
-            <section class="bg-white rounded-2xl border border-slate-200 p-6">
-                <h2 class="text-lg font-semibold text-slate-900 mb-5" data-i18n="section_input">客服场景输入</h2>
-                <div class="space-y-4">
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_scenario">场景类型</label>
-                            <select id="scenario" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option value="opt_presales" data-i18n="opt_presales">售前咨询</option>
-                                <option value="opt_aftersales" data-i18n="opt_aftersales">售后处理</option>
-                                <option value="opt_refund" data-i18n="opt_refund">退款申请</option>
-                                <option value="opt_complaint" data-i18n="opt_complaint">投诉安抚</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-slate-600 mb-2" data-i18n="label_channel">渠道</label>
-                            <select id="channel" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
-                                <option value="opt_online" data-i18n="opt_online">在线客服</option>
-                                <option value="opt_email" data-i18n="opt_email">邮件</option>
-                                <option value="opt_whatsapp" data-i18n="opt_whatsapp">WhatsApp</option>
-                                <option value="opt_wechat" data-i18n="opt_wechat">微信</option>
-                            </select>
+        <div class="grid lg:grid-cols-[1fr_320px] gap-6">
+            <!-- Chat Panel -->
+            <section class="bg-white rounded-2xl border border-slate-200 flex flex-col overflow-hidden">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+                    <h2 class="text-lg font-semibold text-slate-900" data-i18n="section_chat">智能对话</h2>
+                    <div class="flex items-center gap-2 text-sm text-slate-500">
+                        <span data-i18n="label_lang">客户语言</span>
+                        <div class="flex gap-1" id="lang-pills">
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200 active" data-lang="auto">Auto</button>
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200" data-lang="en">EN</button>
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200" data-lang="ja">JA</button>
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200" data-lang="ko">KO</button>
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200" data-lang="es">ES</button>
+                            <button class="lang-badge px-2.5 py-1 rounded-full text-xs border border-slate-200" data-lang="ar">AR</button>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm text-slate-600 mb-2" data-i18n="label_issue">客户问题</label>
-                        <textarea id="customer-issue" rows="9" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none" data-i18n="placeholder_issue" placeholder="请输入客户咨询或投诉内容..."></textarea>
+                </div>
+
+                <div id="chat-messages" class="chat-area flex-1 p-5 space-y-4">
+                    <div class="flex justify-start">
+                        <div class="msg-ai rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]">
+                            <p class="text-gray-700 text-sm" data-i18n="chat_greeting">您好！我是出海电商 AI 客服，专注于全球家具品牌的多语言客户服务。请输入客户的咨询内容（支持任意语言），我将为您生成专业的客服回复。</p>
+                        </div>
                     </div>
-                    <button id="reply-btn" class="w-full py-3 gradient-bg text-white rounded-xl font-medium hover:bg-primary-dark transition-colors" data-i18n="btn_generate">
-                        生成客服回复
-                    </button>
+                </div>
+
+                <div class="p-4 border-t border-slate-100">
+                    <div class="flex space-x-3">
+                        <input type="text" id="chat-input"
+                               data-i18n="chat_placeholder"
+                               placeholder="输入客户咨询内容（支持任意语言）..."
+                               class="flex-1 px-4 py-3 bg-slate-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
+                               onkeypress="if(event.key==='Enter'&&!isLoading)sendMessage()">
+                        <button onclick="sendMessage()" id="send-btn"
+                                class="px-6 py-3 gradient-bg text-white rounded-xl font-medium hover:opacity-90 transition-opacity">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
 
-            <section class="bg-white rounded-2xl border border-slate-200 p-6">
-                <div class="flex items-center justify-between mb-5">
-                    <h2 class="text-lg font-semibold text-slate-900" data-i18n="result_title">输出结果</h2>
-                    <span class="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-500" data-i18n="result_badge">演示界面</span>
+            <!-- Side Panel: Features -->
+            <aside class="space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-4" data-i18n="section_features">核心能力</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-language text-primary text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-900 text-sm" data-i18n="feat1_title">实时自动翻译</div>
+                                <div class="text-slate-500 text-xs mt-0.5" data-i18n="feat1_desc">自动识别客户语言并翻译，回复自动转为客户母语。</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-couch text-primary text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-900 text-sm" data-i18n="feat2_title">家具行业知识</div>
+                                <div class="text-slate-500 text-xs mt-0.5" data-i18n="feat2_desc">内置家具材质、尺寸、物流等行业专属知识库。</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-headset text-primary text-sm"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-900 text-sm" data-i18n="feat3_title">多场景覆盖</div>
+                                <div class="text-slate-500 text-xs mt-0.5" data-i18n="feat3_desc">售前咨询、订单跟踪、退换货、投诉处理一站搞定。</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div id="reply-result" class="rounded-2xl bg-slate-50 border border-slate-100 p-5 min-h-[420px] text-slate-700 leading-7" data-i18n="result_placeholder">
-                    输入客户问题后，可生成客服回复、处理建议与 FAQ 分类预览。
+
+                <div class="bg-white rounded-2xl border border-slate-200 p-5">
+                    <h3 class="font-semibold text-slate-900 mb-3 text-sm">Supported Languages</h3>
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">English</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">日本語</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">한국어</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">Español</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">العربية</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">Français</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">Deutsch</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">Português</span>
+                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-full text-xs">中文</span>
+                    </div>
                 </div>
-            </section>
+
+                <div class="bg-slate-100 rounded-2xl p-5 text-center">
+                    <p class="text-xs text-slate-500">Demo &middot; Responses are AI-generated</p>
+                </div>
+            </aside>
         </div>
     </main>
 
     <script>
-        const replyBtn = document.getElementById('reply-btn');
-        const replyResult = document.getElementById('reply-result');
+        const API_BASE = CONFIG.API_BASE;
+        let isLoading = false;
+        let selectedLang = 'auto';
 
-        function t(key) {
-            const lang = window.YuniI18n ? window.YuniI18n.getLang() : 'zh-CN';
-            const dict = (window.PAGE_TRANSLATIONS || {})[lang] || {};
-            return dict[key] !== undefined ? dict[key] : key;
+        marked.setOptions({ breaks: true, gfm: true });
+
+        document.querySelectorAll('#lang-pills .lang-badge').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#lang-pills .lang-badge').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedLang = btn.dataset.lang;
+            });
+        });
+
+        function escapeHtml(text) {
+            const d = document.createElement('div');
+            d.textContent = text;
+            return d.innerHTML;
         }
 
-        replyBtn.addEventListener('click', () => {
-            const scenarioKey = document.getElementById('scenario').value;
-            const channelKey = document.getElementById('channel').value;
-            const scenarioLabel = t(scenarioKey);
-            const channelLabel = t(channelKey);
-            const issue = document.getElementById('customer-issue').value.trim();
+        function appendMsg(role, content, isMarkdown) {
+            const box = document.getElementById('chat-messages');
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
 
-            if (!issue) {
-                replyResult.innerHTML = '<span class="text-slate-400">' + t('err_empty') + '</span>';
-                return;
+            const bubble = document.createElement('div');
+            if (role === 'user') {
+                bubble.className = 'msg-user rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]';
+                bubble.innerHTML = `<p class="text-white text-sm">${escapeHtml(content)}</p>`;
+            } else {
+                bubble.className = 'msg-ai rounded-2xl rounded-tl-sm px-4 py-3 max-w-[85%]';
+                const html = isMarkdown ? marked.parse(content) : `<p>${escapeHtml(content)}</p>`;
+                bubble.innerHTML = `<div class="markdown-content text-sm">${html}</div>`;
             }
+            wrapper.appendChild(bubble);
+            box.appendChild(wrapper);
+            box.scrollTop = box.scrollHeight;
+        }
 
-            const replyText = t('reply_template').replace('{issue}', issue);
+        function showTyping() {
+            const box = document.getElementById('chat-messages');
+            const el = document.createElement('div');
+            el.id = 'typing';
+            el.className = 'flex justify-start';
+            el.innerHTML = `<div class="msg-ai rounded-2xl rounded-tl-sm px-4 py-3"><div class="flex space-x-1"><span class="typing-dot w-2 h-2 bg-gray-400 rounded-full inline-block"></span><span class="typing-dot w-2 h-2 bg-gray-400 rounded-full inline-block"></span><span class="typing-dot w-2 h-2 bg-gray-400 rounded-full inline-block"></span></div></div>`;
+            box.appendChild(el);
+            box.scrollTop = box.scrollHeight;
+        }
+        function hideTyping() { document.getElementById('typing')?.remove(); }
 
-            replyResult.innerHTML = `
-                <div class="space-y-4">
-                    <div>
-                        <div class="text-sm text-slate-500 mb-1">${t('result_scenario_info')}</div>
-                        <div class="text-slate-900 font-medium">${scenarioLabel} / ${channelLabel}</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-slate-500 mb-1">${t('result_suggested_reply')}</div>
-                        <div class="whitespace-pre-wrap">${replyText}</div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-slate-500 mb-1">${t('result_handling_tips')}</div>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>${t('tip1')}</li>
-                            <li>${t('tip2')}</li>
-                            <li>${t('tip3')}</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-        });
+        function setLoading(v) {
+            isLoading = v;
+            const btn = document.getElementById('send-btn');
+            const inp = document.getElementById('chat-input');
+            btn.disabled = v;
+            btn.innerHTML = v ? '<i class="fas fa-spinner fa-spin"></i>' : '<i class="fas fa-paper-plane"></i>';
+            inp.disabled = v;
+            if (!v) inp.focus();
+        }
+
+        async function sendMessage() {
+            const inp = document.getElementById('chat-input');
+            const query = inp.value.trim();
+            if (!query || isLoading) return;
+
+            appendMsg('user', query);
+            inp.value = '';
+            showTyping();
+            setLoading(true);
+
+            const langHint = selectedLang !== 'auto' ? ` [Reply in ${selectedLang}]` : '';
+
+            try {
+                const resp = await fetch(`${API_BASE}/api/customer-service`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query + langHint }),
+                });
+
+                hideTyping();
+
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({}));
+                    appendMsg('ai', `Error: ${err.detail || 'Request failed'}`, false);
+                    setLoading(false);
+                    return;
+                }
+
+                const data = await resp.json();
+                if (data.status === 'succeeded') {
+                    const answer = data.answer || (data.outputs && (data.outputs.output || JSON.stringify(data.outputs)));
+                    appendMsg('ai', answer || 'No content returned.', true);
+                } else {
+                    appendMsg('ai', `Status: ${data.status} — please try again.`, false);
+                }
+            } catch (e) {
+                hideTyping();
+                appendMsg('ai', `Network error: ${e.message}`, false);
+            }
+            setLoading(false);
+        }
     </script>
 </body>
 </html>

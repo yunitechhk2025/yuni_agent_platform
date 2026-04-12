@@ -48,6 +48,13 @@ AGENTS = {
         description="智能投研分析，提供投资建议",
         app_type=os.getenv("AGENT_INVESTMENT_TYPE", "chat"),
     ),
+    "customer-service": AgentConfig(
+        name="出海电商 AI 客服",
+        api_key=os.getenv("AGENT_CUSTOMER_SERVICE_API_KEY", ""),
+        input_key=os.getenv("AGENT_CUSTOMER_SERVICE_INPUT_KEY", "query"),
+        description="跨境电商多语言 AI 客服，支持实时翻译",
+        app_type=os.getenv("AGENT_CUSTOMER_SERVICE_TYPE", "chat"),
+    ),
 }
 
 
@@ -361,6 +368,41 @@ app.include_router(investment_router)
 
 
 # ==========================================
+# Agent 3: 出海电商 AI 客服 (Chat)
+# ==========================================
+
+cs_router = APIRouter(prefix="/api/customer-service", tags=["出海电商 AI 客服"])
+
+
+@cs_router.post("", response_model=AgentResponse)
+async def handle_customer_service(request: BaseRequest):
+    """跨境电商多语言 AI 客服"""
+    result = await call_dify_agent(
+        agent_id="customer-service",
+        input_value=request.query,
+        user_id=request.user_id,
+        conversation_id=request.conversation_id,
+        stream=False,
+    )
+    return result
+
+
+@cs_router.post("/stream")
+async def handle_customer_service_stream(request: BaseRequest):
+    """流式跨境电商客服"""
+    return await call_dify_agent(
+        agent_id="customer-service",
+        input_value=request.query,
+        user_id=request.user_id,
+        conversation_id=request.conversation_id,
+        stream=True,
+    )
+
+
+app.include_router(cs_router)
+
+
+# ==========================================
 # AI 创意生成器 (生图 / 生视频) — APIMart
 # ==========================================
 
@@ -647,6 +689,11 @@ async def serve_apple_touch_icon():
 @app.get("/i18n.js")
 async def serve_i18n():
     return FileResponse(FRONTEND_DIR / "i18n.js")
+
+
+@app.get("/links.js")
+async def serve_links():
+    return FileResponse(FRONTEND_DIR / "links.js", media_type="application/javascript")
 
 
 @app.get("/config.js")
