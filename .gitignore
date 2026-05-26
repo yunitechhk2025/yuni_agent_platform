@@ -13,6 +13,9 @@ ENV/
 # Uploads (runtime generated)
 uploads/
 
+# Demo 申请记录（运行时生成，含用户隐私数据）
+applications.json
+
 # IDE
 .idea/
 .vscode/

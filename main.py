@@ -2,6 +2,11 @@ import os
 import uuid
 import base64
 import asyncio
+import json
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, Any, Literal
 from contextlib import asynccontextmanager
@@ -21,6 +26,16 @@ FRONTEND_DIR = BASE_DIR / "frontend"
 load_dotenv()
 
 DIFY_API_BASE_URL = os.getenv("DIFY_API_BASE_URL", "http://localhost/v1")
+
+# ---- Demo 申请 & 管理员 ----
+SMTP_HOST     = os.getenv("SMTP_HOST", "smtp.gmail.com")
+SMTP_PORT     = int(os.getenv("SMTP_PORT", "587"))
+SMTP_USER     = os.getenv("SMTP_USER", "")
+SMTP_PASS     = os.getenv("SMTP_PASS", "")
+APPLY_TO      = os.getenv("APPLY_TO",  "info@yunitechhk.com")
+APPLY_CC      = os.getenv("APPLY_CC",  "yunitechhk@gmail.com")
+ADMIN_SECRET  = os.getenv("ADMIN_SECRET", "")
+APPLICATIONS_FILE = BASE_DIR / "applications.json"
 
 
 @dataclass
@@ -86,6 +101,82 @@ class AgentResponse(BaseModel):
     task_id: Optional[str] = None
     elapsed_time: Optional[float] = None
     total_tokens: Optional[int] = None
+
+
+class ApplyRequest(BaseModel):
+    """Demo 试用申请"""
+    company:  str
+    name:     str
+    phone:    str
+    email:    str
+    industry: str
+
+
+# ---- 邮件 & 存储 helpers ----
+
+def _send_apply_email_sync(data: dict) -> None:
+    msg = MIMEMultipart("alternative")
+    msg["From"]    = SMTP_USER
+    msg["To"]      = APPLY_TO
+    msg["Cc"]      = APPLY_CC
+    msg["Subject"] = f"[YUNI AI] Demo 试用申请 - {data['company']} · {data['name']}"
+
+    html = f"""<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;background:#f8fafc;padding:24px;margin:0">
+<div style="max-width:580px;margin:0 auto;background:#fff;border-radius:12px;
+            padding:32px;box-shadow:0 2px 12px rgba(0,0,0,.08)">
+  <div style="border-left:4px solid #6A3AB7;padding-left:16px;margin-bottom:28px">
+    <h2 style="color:#6A3AB7;margin:0 0 4px">YUNI AI Agent 平台</h2>
+    <p style="color:#64748b;margin:0;font-size:14px">新的 Demo 试用申请</p>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:14px">
+    <tr style="border-bottom:1px solid #f1f5f9">
+      <td style="padding:10px 0;color:#64748b;width:130px">公司名称</td>
+      <td style="padding:10px 0;font-weight:600;color:#1e293b">{data['company']}</td>
+    </tr>
+    <tr style="border-bottom:1px solid #f1f5f9">
+      <td style="padding:10px 0;color:#64748b">姓名</td>
+      <td style="padding:10px 0;font-weight:600;color:#1e293b">{data['name']}</td>
+    </tr>
+    <tr style="border-bottom:1px solid #f1f5f9">
+      <td style="padding:10px 0;color:#64748b">联系电话</td>
+      <td style="padding:10px 0;font-weight:600;color:#1e293b">{data['phone']}</td>
+    </tr>
+    <tr style="border-bottom:1px solid #f1f5f9">
+      <td style="padding:10px 0;color:#64748b">邮箱</td>
+      <td style="padding:10px 0;font-weight:600;color:#1e293b">{data['email']}</td>
+    </tr>
+    <tr>
+      <td style="padding:10px 0;color:#64748b;vertical-align:top">行业/产品/服务</td>
+      <td style="padding:10px 0;font-weight:600;color:#1e293b;white-space:pre-wrap">{data['industry']}</td>
+    </tr>
+  </table>
+  <p style="color:#94a3b8;font-size:12px;margin-top:24px;border-top:1px solid #f1f5f9;
+            padding-top:16px">申请时间：{data['created_at']}</p>
+</div>
+</body>
+</html>"""
+
+    msg.attach(MIMEText(html, "html"))
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as srv:
+        srv.ehlo()
+        srv.starttls()
+        srv.login(SMTP_USER, SMTP_PASS)
+        srv.sendmail(SMTP_USER, [APPLY_TO, APPLY_CC], msg.as_string())
+
+
+def _store_application(data: dict) -> None:
+    records: list = []
+    if APPLICATIONS_FILE.exists():
+        try:
+            records = json.loads(APPLICATIONS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            records = []
+    records.append(data)
+    APPLICATIONS_FILE.write_text(
+        json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
 
 http_client: Optional[httpx.AsyncClient] = None
@@ -297,6 +388,33 @@ async def list_agents():
         }
         for agent_id, agent in AGENTS.items()
     }
+
+
+@app.post("/api/apply")
+async def apply_demo(request: ApplyRequest):
+    """接收 Demo 试用申请，存储并发送邮件通知"""
+    import logging
+    logger = logging.getLogger("uvicorn.error")
+
+    data = {
+        **request.model_dump(),
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    await asyncio.to_thread(_store_application, data)
+    try:
+        await asyncio.to_thread(_send_apply_email_sync, data)
+        logger.info(f"[Apply] Email sent for {data['company']} · {data['name']}")
+    except Exception as e:
+        logger.error(f"[Apply] Email failed: {e}")
+    return {"success": True}
+
+
+@app.get("/api/admin-verify")
+async def admin_verify(key: str = ""):
+    """校验管理员密钥"""
+    if not ADMIN_SECRET or not key:
+        return {"valid": False}
+    return {"valid": key == ADMIN_SECRET}
 
 
 # ==========================================

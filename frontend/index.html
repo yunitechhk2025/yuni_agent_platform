@@ -557,6 +557,71 @@
         </div>
     </footer>
 
+    <!-- Apply Modal -->
+    <div id="apply-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
+            <!-- Header -->
+            <div class="flex items-start justify-between p-6 border-b border-slate-100">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900">申请 Demo 试用</h3>
+                    <p class="text-sm text-slate-500 mt-1">填写以下信息，我们将在 1-2 个工作日内与您联系</p>
+                </div>
+                <button onclick="closeApplyModal()" class="w-9 h-9 hover:bg-slate-100 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ml-4">
+                    <i class="fas fa-times text-slate-400"></i>
+                </button>
+            </div>
+            <!-- Form -->
+            <form id="apply-form" class="p-6 space-y-4" onsubmit="submitApply(event)">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">公司名称 <span class="text-red-500">*</span></label>
+                        <input type="text" id="apply-company" required placeholder="您的公司名称"
+                               class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">姓名 <span class="text-red-500">*</span></label>
+                        <input type="text" id="apply-name" required placeholder="您的姓名"
+                               class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">联系电话 <span class="text-red-500">*</span></label>
+                        <input type="tel" id="apply-phone" required placeholder="+852 / +86..."
+                               class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">邮箱 <span class="text-red-500">*</span></label>
+                        <input type="email" id="apply-email" required placeholder="your@email.com"
+                               class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5">行业 / 产品 / 服务 <span class="text-red-500">*</span></label>
+                    <textarea id="apply-industry" required rows="3"
+                              placeholder="请简述您的行业、主要产品或服务，便于我们为您推荐最合适的 AI 方案"
+                              class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none"></textarea>
+                </div>
+                <div id="apply-error" class="hidden text-red-600 text-sm bg-red-50 border border-red-100 px-4 py-2.5 rounded-lg"></div>
+                <button type="submit" id="apply-submit"
+                        class="w-full py-3 gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm">
+                    <i class="fas fa-paper-plane"></i> 提交申请
+                </button>
+            </form>
+            <!-- Success State -->
+            <div id="apply-success" class="hidden p-8 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-2xl text-green-600"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-900 mb-2">申请已提交！</h4>
+                <p class="text-slate-500 text-sm leading-relaxed">感谢您的申请，我们已收到信息<br>将在 1–2 个工作日内通过邮件或电话与您联系。</p>
+                <button onclick="closeApplyModal()" class="mt-6 px-8 py-2.5 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Chat Modal -->
     <div id="chat-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
@@ -782,11 +847,102 @@
     <script src="links.js"></script>
     <script src="config.js"></script>
     <script>
-        // 从 links.js 注入各模块链接
+        // ---- Admin bypass ----
+        // 访问 ?admin=SECRET 时写入 localStorage，之后直接跳过申请表单
+        (function () {
+            const p = new URLSearchParams(location.search);
+            const k = p.get('admin');
+            if (k) {
+                localStorage.setItem('yuni_admin', k);
+                const u = new URL(location.href);
+                u.searchParams.delete('admin');
+                history.replaceState({}, '', u.toString());
+            }
+        })();
+
+        let _adminStatus = null; // null=未知, true/false=已确认
+
+        async function checkAdmin() {
+            if (_adminStatus !== null) return _adminStatus;
+            const key = localStorage.getItem('yuni_admin');
+            if (!key) { _adminStatus = false; return false; }
+            try {
+                const r = await fetch('/api/admin-verify?key=' + encodeURIComponent(key));
+                const d = await r.json();
+                _adminStatus = d.valid === true;
+                if (!_adminStatus) localStorage.removeItem('yuni_admin');
+            } catch { _adminStatus = false; }
+            return _adminStatus;
+        }
+
+        // ---- Apply modal ----
+        function openApplyModal() {
+            document.getElementById('apply-modal').classList.remove('hidden');
+            document.getElementById('apply-modal').classList.add('flex');
+            document.getElementById('apply-form').classList.remove('hidden');
+            document.getElementById('apply-success').classList.add('hidden');
+            document.getElementById('apply-error').classList.add('hidden');
+        }
+
+        function closeApplyModal() {
+            document.getElementById('apply-modal').classList.add('hidden');
+            document.getElementById('apply-modal').classList.remove('flex');
+        }
+
+        async function submitApply(e) {
+            e.preventDefault();
+            const btn   = document.getElementById('apply-submit');
+            const errEl = document.getElementById('apply-error');
+            errEl.classList.add('hidden');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 提交中...';
+
+            const payload = {
+                company:  document.getElementById('apply-company').value.trim(),
+                name:     document.getElementById('apply-name').value.trim(),
+                phone:    document.getElementById('apply-phone').value.trim(),
+                email:    document.getElementById('apply-email').value.trim(),
+                industry: document.getElementById('apply-industry').value.trim(),
+            };
+
+            try {
+                const r = await fetch('/api/apply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                if (!r.ok) throw new Error('提交失败，请稍后重试');
+                document.getElementById('apply-form').classList.add('hidden');
+                document.getElementById('apply-success').classList.remove('hidden');
+                document.getElementById('apply-form').reset();
+            } catch (err) {
+                errEl.textContent = err.message;
+                errEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> 提交申请';
+            }
+        }
+
+        // ---- 门控：拦截所有 data-link 按钮点击 ----
         document.querySelectorAll('[data-link]').forEach(el => {
             const key = el.dataset.link;
-            if (AGENT_LINKS[key]) el.href = AGENT_LINKS[key];
+            const url = AGENT_LINKS[key];
+            if (!url) return;
+            el.removeAttribute('href');
+            el.style.cursor = 'pointer';
+            el.addEventListener('click', async function (e) {
+                e.preventDefault();
+                if (await checkAdmin()) {
+                    window.open(url, '_blank');
+                } else {
+                    openApplyModal();
+                }
+            });
         });
+
+        // 预热：页面加载后静默检查 admin 状态
+        checkAdmin();
 
         const API_BASE = CONFIG.API_BASE;
         let currentAgent = null;
@@ -995,7 +1151,12 @@
         
         // ESC 键关闭弹窗
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeChat();
+            if (e.key === 'Escape') { closeChat(); closeApplyModal(); }
+        });
+
+        // 点击遮罩关闭申请弹窗
+        document.getElementById('apply-modal').addEventListener('click', function (e) {
+            if (e.target === this) closeApplyModal();
         });
     </script>
 </body>
