@@ -8,5 +8,5 @@ const AGENT_LINKS = {
     agent3: 'investment.html',
     agent4: 'video-generator.html',
     agent5: 'https://cs.yuniagent.ai',
-    // agent6 为"即将上线"，无链接
+    agent6: 'https://demo.yuniagent.ai',
 };
