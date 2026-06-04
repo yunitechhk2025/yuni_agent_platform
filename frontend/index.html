@@ -564,8 +564,8 @@
             <!-- Header -->
             <div class="flex items-start justify-between p-6 border-b border-slate-100">
                 <div>
-                    <h3 class="text-xl font-bold text-slate-900">申请 Demo 试用</h3>
-                    <p class="text-sm text-slate-500 mt-1">填写以下信息，我们将在 1-2 个工作日内与您联系</p>
+                    <h3 class="text-xl font-bold text-slate-900" data-i18n="modal_title">申请 Demo 试用</h3>
+                    <p class="text-sm text-slate-500 mt-1" data-i18n="modal_subtitle">填写以下信息，我们将在 1-2 个工作日内与您联系</p>
                 </div>
                 <button onclick="closeApplyModal()" class="w-9 h-9 hover:bg-slate-100 rounded-lg flex items-center justify-center transition-colors flex-shrink-0 ml-4">
                     <i class="fas fa-times text-slate-400"></i>
@@ -575,38 +575,38 @@
             <form id="apply-form" class="p-6 space-y-4" onsubmit="submitApply(event)">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">公司名称 <span class="text-red-500">*</span></label>
-                        <input type="text" id="apply-company" required placeholder="您的公司名称"
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5"><span data-i18n="modal_company">公司名称</span> <span class="text-red-500">*</span></label>
+                        <input type="text" id="apply-company" required placeholder="您的公司名称" data-i18n="modal_company_ph"
                                class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">姓名 <span class="text-red-500">*</span></label>
-                        <input type="text" id="apply-name" required placeholder="您的姓名"
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5"><span data-i18n="modal_name">姓名</span> <span class="text-red-500">*</span></label>
+                        <input type="text" id="apply-name" required placeholder="您的姓名" data-i18n="modal_name_ph"
                                class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">联系电话 <span class="text-red-500">*</span></label>
-                        <input type="tel" id="apply-phone" required placeholder="+852 / +86..."
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5"><span data-i18n="modal_phone">联系电话</span> <span class="text-red-500">*</span></label>
+                        <input type="tel" id="apply-phone" required placeholder="+852 / +86..." data-i18n="modal_phone_ph"
                                class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1.5">邮箱 <span class="text-red-500">*</span></label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5"><span data-i18n="modal_email">邮箱</span> <span class="text-red-500">*</span></label>
                         <input type="email" id="apply-email" required placeholder="your@email.com"
                                class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1.5">行业 / 产品 / 服务 <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-medium text-slate-700 mb-1.5"><span data-i18n="modal_industry">行业 / 产品 / 服务</span> <span class="text-red-500">*</span></label>
                     <textarea id="apply-industry" required rows="3"
-                              placeholder="请简述您的行业、主要产品或服务，便于我们为您推荐最合适的 AI 方案"
+                              placeholder="请简述您的行业、主要产品或服务，便于我们为您推荐最合适的 AI 方案" data-i18n="modal_industry_ph"
                               class="w-full px-3.5 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors resize-none"></textarea>
                 </div>
                 <div id="apply-error" class="hidden text-red-600 text-sm bg-red-50 border border-red-100 px-4 py-2.5 rounded-lg"></div>
                 <button type="submit" id="apply-submit"
                         class="w-full py-3 gradient-bg text-white rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2 text-sm">
-                    <i class="fas fa-paper-plane"></i> 提交申请
+                    <i class="fas fa-paper-plane"></i> <span data-i18n="modal_submit">提交申请</span>
                 </button>
             </form>
             <!-- Success State -->
@@ -614,9 +614,9 @@
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="fas fa-check text-2xl text-green-600"></i>
                 </div>
-                <h4 class="text-xl font-bold text-slate-900 mb-2">申请已提交！</h4>
-                <p class="text-slate-500 text-sm leading-relaxed">感谢您的申请，我们已收到信息<br>将在 1–2 个工作日内通过邮件或电话与您联系。</p>
-                <button onclick="closeApplyModal()" class="mt-6 px-8 py-2.5 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium">
+                <h4 class="text-xl font-bold text-slate-900 mb-2" data-i18n="modal_success_title">申请已提交！</h4>
+                <p class="text-slate-500 text-sm leading-relaxed" data-i18n="modal_success_desc">感谢您的申请，我们已收到信息<br>将在 1–2 个工作日内通过邮件或电话与您联系。</p>
+                <button onclick="closeApplyModal()" class="mt-6 px-8 py-2.5 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium" data-i18n="modal_close">
                     关闭
                 </button>
             </div>
@@ -724,7 +724,22 @@
             'footer_l1': '官网首页', 'footer_l2': 'AI Agent', 'footer_l3': '关于我们',
             'footer_contact': '联系方式',
             'chat_greeting': '您好！我是 AI Agent，请输入您的问题，我将为您提供专业的分析和建议。',
-            'chat_placeholder': '输入您的问题...'
+            'chat_placeholder': '输入您的问题...',
+            'modal_title': '申请 Demo 试用',
+            'modal_subtitle': '填写以下信息，我们将在 1-2 个工作日内与您联系',
+            'modal_company': '公司名称',
+            'modal_company_ph': '您的公司名称',
+            'modal_name': '姓名',
+            'modal_name_ph': '您的姓名',
+            'modal_phone': '联系电话',
+            'modal_phone_ph': '+852 / +86...',
+            'modal_email': '邮箱',
+            'modal_industry': '行业 / 产品 / 服务',
+            'modal_industry_ph': '请简述您的行业、主要产品或服务，便于我们为您推荐最合适的 AI 方案',
+            'modal_submit': '提交申请',
+            'modal_success_title': '申请已提交！',
+            'modal_success_desc': '感谢您的申请，我们已收到信息<br>将在 1–2 个工作日内通过邮件或电话与您联系。',
+            'modal_close': '关闭'
         },
         'zh-TW': {
             '_title': 'YUNI AI Agent 平台 - AI Agent 聚合中心',
@@ -782,7 +797,22 @@
             'footer_l1': '官網首頁', 'footer_l2': 'AI Agent', 'footer_l3': '關於我們',
             'footer_contact': '聯繫方式',
             'chat_greeting': '您好！我是 AI Agent，請輸入您的問題，我將為您提供專業的分析和建議。',
-            'chat_placeholder': '輸入您的問題...'
+            'chat_placeholder': '輸入您的問題...',
+            'modal_title': '申請 Demo 試用',
+            'modal_subtitle': '填寫以下信息，我們將在 1-2 個工作日內與您聯繫',
+            'modal_company': '公司名稱',
+            'modal_company_ph': '您的公司名稱',
+            'modal_name': '姓名',
+            'modal_name_ph': '您的姓名',
+            'modal_phone': '聯繫電話',
+            'modal_phone_ph': '+852 / +886...',
+            'modal_email': '郵箱',
+            'modal_industry': '行業 / 產品 / 服務',
+            'modal_industry_ph': '請簡述您的行業、主要產品或服務，便於我們為您推薦最合適的 AI 方案',
+            'modal_submit': '提交申請',
+            'modal_success_title': '申請已提交！',
+            'modal_success_desc': '感謝您的申請，我們已收到信息<br>將在 1–2 個工作日內通過郵件或電話與您聯繫。',
+            'modal_close': '關閉'
         },
         'en': {
             '_title': 'YUNI AI Agent Platform',
@@ -840,7 +870,22 @@
             'footer_l1': 'Official Site', 'footer_l2': 'AI Agent', 'footer_l3': 'About Us',
             'footer_contact': 'Contact',
             'chat_greeting': 'Hello! I am an AI Agent. Please enter your question and I will provide professional analysis and suggestions.',
-            'chat_placeholder': 'Enter your question...'
+            'chat_placeholder': 'Enter your question...',
+            'modal_title': 'Apply for Demo Trial',
+            'modal_subtitle': 'Fill in the details below and we\'ll get back to you within 1–2 business days',
+            'modal_company': 'Company Name',
+            'modal_company_ph': 'Your company name',
+            'modal_name': 'Name',
+            'modal_name_ph': 'Your name',
+            'modal_phone': 'Phone Number',
+            'modal_phone_ph': '+852 / +1...',
+            'modal_email': 'Email',
+            'modal_industry': 'Industry / Product / Service',
+            'modal_industry_ph': 'Briefly describe your industry, main products or services to help us recommend the best AI solution for you',
+            'modal_submit': 'Submit',
+            'modal_success_title': 'Application Submitted!',
+            'modal_success_desc': 'Thank you for your application. We have received your information<br>and will reach out by email or phone within 1–2 business days.',
+            'modal_close': 'Close'
         }
     };
     </script>
