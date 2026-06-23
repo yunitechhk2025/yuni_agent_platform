@@ -987,25 +987,18 @@
             }
         }
 
-        // ---- 门控：拦截所有 data-link 按钮点击 ----
+        // ---- 直接跳转：所有 data-link 按钮点击直接打开对应链接 ----
         document.querySelectorAll('[data-link]').forEach(el => {
             const key = el.dataset.link;
             const url = AGENT_LINKS[key];
             if (!url) return;
             el.removeAttribute('href');
             el.style.cursor = 'pointer';
-            el.addEventListener('click', async function (e) {
+            el.addEventListener('click', function (e) {
                 e.preventDefault();
-                if (await checkAdmin()) {
-                    window.open(url, '_blank');
-                } else {
-                    openApplyModal();
-                }
+                window.open(url, '_blank');
             });
         });
-
-        // 预热：页面加载后静默检查 admin 状态
-        checkAdmin();
 
         const API_BASE = CONFIG.API_BASE;
         let currentAgent = null;
