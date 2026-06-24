@@ -7,8 +7,16 @@
         { code: 'en',    label: 'EN' }
     ];
 
+    function getBrowserLang() {
+        const nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+        const lower = nav.toLowerCase();
+        if (lower === 'zh-tw' || lower === 'zh-hk' || lower === 'zh-mo') return 'zh-TW';
+        if (lower.startsWith('en')) return 'en';
+        return DEFAULT_LANG;
+    }
+
     function getLang() {
-        return localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
+        return localStorage.getItem(STORAGE_KEY) || getBrowserLang();
     }
 
     function setLang(code) {
