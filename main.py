@@ -754,16 +754,16 @@ _INDEX_META = {
 }
 
 def _detect_lang(accept_language: str) -> str:
-    """从 Accept-Language 头选择最佳语言"""
+    """从 Accept-Language 头选择最佳语言，默认繁体中文"""
     if not accept_language:
         return 'zh-TW'
     al = accept_language.lower()
-    if 'zh-tw' in al or 'zh-hk' in al or 'zh-mo' in al:
-        return 'zh-TW'
-    if al.startswith('en') or ',en' in al or ';en' in al:
-        return 'en'
-    if 'zh' in al:
+    if 'zh-cn' in al:
         return 'zh-CN'
+    if 'zh' in al or al.startswith('zh'):
+        return 'zh-TW'
+    if 'en' in al:
+        return 'en'
     return 'zh-TW'
 
 @app.get("/")
