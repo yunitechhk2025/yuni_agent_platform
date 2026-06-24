@@ -14,7 +14,7 @@ from dataclasses import dataclass
 
 import httpx
 from fastapi import FastAPI, HTTPException, APIRouter, UploadFile, File, Form, Request
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.responses import StreamingResponse, FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -735,10 +735,57 @@ async def get_task_status(task_id: str):
 # 前端静态文件服务
 # ==========================================
 
+_INDEX_META = {
+    'zh-TW': {
+        'title': 'YUNI AI Agent 平台 - AI Agent 聚合中心',
+        'desc':  'YUNI AI Agent 平台，聚合多款專業 AI Agent，為您的業務提供一站式解決方案。',
+        'lang':  'zh-TW',
+    },
+    'en': {
+        'title': 'YUNI AI Agent Studio - AI Agent Hub',
+        'desc':  'Aggregating professional AI Agents to provide one-stop solutions for your business.',
+        'lang':  'en',
+    },
+    'zh-CN': {
+        'title': 'YUNI AI Agent 平台 - AI Agent 聚合中心',
+        'desc':  'YUNI AI Agent 平台，聚合多款专业 AI Agent，为您的业务提供一站式解决方案。',
+        'lang':  'zh-CN',
+    },
+}
+
+def _detect_lang(accept_language: str) -> str:
+    """从 Accept-Language 头选择最佳语言"""
+    if not accept_language:
+        return 'zh-TW'
+    al = accept_language.lower()
+    if 'zh-tw' in al or 'zh-hk' in al or 'zh-mo' in al:
+        return 'zh-TW'
+    if al.startswith('en') or ',en' in al or ';en' in al:
+        return 'en'
+    if 'zh' in al:
+        return 'zh-CN'
+    return 'zh-TW'
+
 @app.get("/")
-async def serve_frontend():
-    """服务前端首页"""
-    return FileResponse(FRONTEND_DIR / "index.html")
+async def serve_frontend(request: Request):
+    """服务前端首页，根据 Accept-Language 动态注入 title 与 meta description"""
+    accept_lang = request.headers.get('accept-language', '')
+    lang_key = _detect_lang(accept_lang)
+    meta = _INDEX_META[lang_key]
+
+    html = (FRONTEND_DIR / "index.html").read_text(encoding='utf-8')
+    # 替换 <title>
+    import re
+    html = re.sub(r'<title>.*?</title>', f'<title>{meta["title"]}</title>', html, flags=re.DOTALL)
+    # 替换或插入 <meta name="description">
+    desc_tag = f'<meta name="description" content="{meta["desc"]}">'
+    if re.search(r'<meta\s+name=["\']description["\']', html, re.IGNORECASE):
+        html = re.sub(r'<meta\s+name=["\']description["\'][^>]*>', desc_tag, html, flags=re.IGNORECASE)
+    else:
+        html = html.replace('</head>', f'    {desc_tag}\n</head>', 1)
+    # 替换 <html lang="">
+    html = re.sub(r'<html\s+lang="[^"]*"', f'<html lang="{meta["lang"]}"', html)
+    return HTMLResponse(content=html)
 
 
 @app.get("/painpoint.html")
@@ -778,9 +825,9 @@ async def serve_customer_service():
 
 
 @app.get("/index.html")
-async def serve_index():
-    """服务首页"""
-    return FileResponse(FRONTEND_DIR / "index.html")
+async def serve_index(request: Request):
+    """服务首页（同 /，支持 Accept-Language 语言注入）"""
+    return await serve_frontend(request)
 
 
 @app.get("/logo.png")
